@@ -14,7 +14,7 @@ export default function ModelViewer2D({ twinType, telemetry }: ModelViewer2DProp
   const iframeUrls: Record<TwinType, string> = {
     qbtec: "https://dtqbtec.netlify.app",
     woerden: "https://dtwoerden.netlify.app",
-    retail: "https://dtretail.netlify.app"
+    retail: "https://dt-retail.netlify.app"
   };
 
   const statusColor = 

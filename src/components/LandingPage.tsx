@@ -63,7 +63,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       id: "retail" as const,
       name: "Predictive Retail Supermarkt",
       company: "Winkel & Retail Let's-Twin",
-      iframeUrl: "https://dtretail.netlify.app",
+      iframeUrl: "https://dt-retail.netlify.app",
       description: "Digital twin van een actieve retailwinkel. Beheer schapbezetting, koeling-telemetry, drukte bij de kassa's en de voorspelde effecten van promotie-acties.",
       keyStats: [
         { label: "NU winkelend", value: "48 personen" },
