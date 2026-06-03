@@ -1,0 +1,6 @@
+{
+  "name": "Let's Twin",
+  "description": "De ultieme website en interactieve simulatie-dashboard voor Digital Twins, compleet met live IoT real-time monitoring en een intelligente AI twin-expert.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
