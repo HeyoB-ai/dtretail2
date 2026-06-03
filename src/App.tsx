@@ -17,7 +17,7 @@ export default function App() {
       id: "welcome",
       sender: "ai",
       text: "Hallo! Ik ben Leta, jouw Let's-Twin AI Co-pilot.\n\n" +
-            "Ik sta in direct contact met de IoT-sensors via onze Edge SCADA-gateways van QBTEC (Maakbedrijf), Gemeente Woerden (Stadsbeheer) en onze Predictive Retail-supermarkt.\n\n" +
+            "Ik sta in direct contact met de IoT-sensors via onze Edge SCADA-gateways van QBTEC (Maakbedrijf), Gemeente Woerden (Stadsbeheer) en onze Sole Twin Luxe Schoenmode (5 filialen).\n\n" +
             "Samen kunnen we de live telemetry analyseren en ingewikkelde 'Wat-Als' scenario's doorrekenen. Ik help je bij het nemen van de juiste beleid- en operationele beslissingen! " +
             "Stuur me een bericht of klik op een van de scenario-knoppen in de Live Control Room om direct te beginnen.",
       timestamp: new Date()
@@ -111,7 +111,7 @@ export default function App() {
   const getTwinReadableName = (t: TwinType) => {
     if (t === 'qbtec') return 'Maakbedrijf QBTEC';
     if (t === 'woerden') return 'Gemeente Woerden';
-    return 'Retail Supermarkt';
+    return 'Sole Twin Schoenmode';
   };
 
   return (
@@ -209,7 +209,7 @@ export default function App() {
                       <div className="flex items-center space-x-2.5">
                         <ShoppingBag className="h-4 w-4 text-indigo-400" />
                         <div>
-                          <span className="block font-semibold text-white">Retail Supermarkt Hub</span>
+                          <span className="block font-semibold text-white">Schoenmode Retail (5 Filialen)</span>
                           <span className="block text-[9px] text-slate-500">Edge Router Node • API Sync</span>
                         </div>
                       </div>
@@ -233,7 +233,7 @@ export default function App() {
                       <p className="text-blue-400">&gt; Bezig met scannen van QBTEC lasersnijder-temperaturen...</p>
                       <p className="text-emerald-400">&gt; Status: Geen hitte-overschrijding gedetecteerd op de fabrieksvloer.</p>
                       <p className="text-cyan-400">&gt; Woerden waterpeil Singel bevindt zich op een volkomen veilig niveau.</p>
-                      <p className="text-purple-400">&gt; Koelcellen supermarkt opereren binnen de geautoriseerde eco-zones.</p>
+                      <p className="text-purple-400">&gt; Klimaatbeheersing Flagship store functioneert optimaal rond de 21.0°C.</p>
                       <p className="text-slate-500">&gt; AI Model staat klaar voor directe scenario-evaluatie.</p>
                     </div>
                   </div>

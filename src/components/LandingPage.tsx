@@ -61,16 +61,16 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
     },
     {
       id: "retail" as const,
-      name: "Predictive Retail Supermarkt",
-      company: "Winkel & Retail Let's-Twin",
+      name: "Sole Twin Schoenmode (5 Filialen)",
+      company: "Sole Twin Let's-Twin",
       iframeUrl: "https://dt-retail.netlify.app",
-      description: "Digital twin van een actieve retailwinkel. Beheer schapbezetting, koeling-telemetry, drukte bij de kassa's en de voorspelde effecten van promotie-acties.",
+      description: "Digital twin van een actieve luxe schoenenketen met 5 fysieke winkels. Beheer consumentenstromen, kassa-wachtrijen, actuele schapbezetting en optimaliseer de voorraadoverdracht in realtime.",
       keyStats: [
-        { label: "NU winkelend", value: "48 personen" },
-        { label: "Optimalisatie", value: "-18% derving" },
-        { label: "Scenario", value: "Vrijdagmiddag Piekbelasting" }
+        { label: "Nu winkelend (totaal)", value: "84 personen" },
+        { label: "Optimalisatie omloopsnelheid", value: "+21% sneller" },
+        { label: "Scenario", value: "Zaterdagmiddag Solden Piek" }
       ],
-      badges: ["Retail Analytics", "Eco-Koelingen", "Klantstromen"],
+      badges: ["Luxe Schoenmode", "5 Filialen Connect", "In-Store Traffic"],
       themeColor: "text-emerald-400 border-emerald-500/20 bg-emerald-500/10"
     }
   ];
@@ -447,7 +447,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                         : 'bg-black/35 border-white/5 text-slate-450 hover:bg-white/5'
                     }`}
                   >
-                    🥬 Retail / Supermarkt
+                    👟 Schoenmode / Luxe Retail
                   </button>
                 </div>
               </div>
@@ -759,13 +759,13 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
 
           <div className="p-6 rounded-2xl border border-white/10 bg-white/5 flex flex-col justify-between backdrop-blur-sm">
             <p className="italic text-slate-400 leading-relaxed">
-              "In de retail telt elke seconde wachtrij en elke graad temperatuurafwijking in de diepvries. Dit operationele dashboard integreert onze sensoren vlekkeloos en stuurt proactief kassa-bezettingen aan wegens realtime klantstromen."
+              "Voor onze luxe keten van 5 schoenwinkels was het optimaliseren van de schoenmaat-voorraad cruciaal. Dankzij de Sole Twin digital twin signaleren we looproutes en kassa-knelpunten direct, waardoor onze winkelomzet met 11% en klanttevredenheid enorm steeg."
             </p>
             <div className="mt-4 pt-3 border-t border-white/5 flex items-center space-x-3">
-              <span className="h-8 w-8 rounded-full bg-purple-600/20 text-purple-400 font-bold font-display uppercase flex items-center justify-center">RT</span>
+              <span className="h-8 w-8 rounded-full bg-purple-600/20 text-purple-400 font-bold font-display uppercase flex items-center justify-center">ST</span>
               <div>
-                <span className="block font-bold text-white text-[11px]">Ir. Jansen</span>
-                <span className="block text-[9px] text-slate-500 font-mono uppercase">Directeur Logistiek • Predictive Retail</span>
+                <span className="block font-bold text-white text-[11px]">Mevr. Van Zuylen</span>
+                <span className="block text-[9px] text-slate-500 font-mono uppercase">Directeur Logistiek & Retail • Sole Twin Shoes</span>
               </div>
             </div>
           </div>

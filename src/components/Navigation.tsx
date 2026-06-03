@@ -61,7 +61,7 @@ export default function Navigation({ currentTab, setTab, isAiResponding = false 
             }`}
           >
             <Activity className="h-3.5 w-3.5" />
-            <span>Simulation</span>
+            <span>Live Replicas</span>
           </button>
 
           <button

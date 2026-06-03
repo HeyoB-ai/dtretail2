@@ -26,7 +26,7 @@ export default function ModelViewer2D({ twinType, telemetry }: ModelViewer2DProp
     switch(twinType) {
       case 'qbtec': return "Let's-Twin #QB-500 (Food Machinery Line)";
       case 'woerden': return "Let's-Twin #WO-340 (Woerden Smart City)";
-      case 'retail': return "Let's-Twin #RT-880 (Predictive Supermarket)";
+      case 'retail': return "Let's-Twin #ST-910 (Sole Twin Schoenwinkels)";
     }
   };
 
@@ -34,7 +34,7 @@ export default function ModelViewer2D({ twinType, telemetry }: ModelViewer2DProp
     switch(twinType) {
       case 'qbtec': return "Modbus/TCP Client Enabled";
       case 'woerden': return "LoRaWAN Urban Gateway";
-      case 'retail': return "Edge Co-Op Store Hub";
+      case 'retail': return "Sole Twin Multi-Store Central Gateway";
     }
   };
 
@@ -221,43 +221,45 @@ export default function ModelViewer2D({ twinType, telemetry }: ModelViewer2DProp
               );
             })()}
 
-            {/* 3. RETAIL SUPERMARKT SCHEMATIC */}
+            {/* 3. SOLE TWIN SCHOENWINKELS SCHEMATIC */}
             {twinType === 'retail' && (() => {
               const rTelemetry = telemetry as RetailTelemetry;
               const isAisleCrowded = rTelemetry.aisleTraffic > 35;
-              const isFreezerWarm = rTelemetry.refrigerationTemp > 7.0;
+              const isAcWarm = rTelemetry.refrigerationTemp > 24.0; // Reused for AC/Climate status warning
               
               return (
                 <div className="w-full flex flex-col items-center justify-center space-y-4">
                   <svg viewBox="0 0 320 200" className="w-full max-w-[280px] h-auto">
-                    {/* Supermarket floor aisles layout */}
+                    {/* Shoe retail floor display shelves */}
                     <rect x="20" y="40" width="70" height="130" rx="3" fill="#1e293b" stroke="#334155" />
                     <rect x="110" y="40" width="70" height="130" rx="3" fill="#1e293b" stroke="#334155" />
+                    <text x="25" y="80" className="text-[7px] font-mono fill-slate-400">DAMES AFDELING</text>
+                    <text x="115" y="80" className="text-[7px] font-mono fill-slate-400">HEREN & SPORT</text>
                     
-                    {/* Food cold lockers freezer */}
-                    <rect x="200" y="40" width="100" height="55" rx="3" fill="#0f172a" stroke={isFreezerWarm ? "#ef4444" : "#3b82f6"} strokeWidth="1.5" />
-                    <text x="210" y="55" className="text-[8px] font-mono" fill={isFreezerWarm ? "#ef4444" : "#3b82f6"}>FREEZER CELL</text>
-                    <text x="210" y="72" className="text-[10px] font-mono font-bold" fill="#ffffff">{rTelemetry.refrigerationTemp}°C</text>
+                    {/* Central warehouse depot climate control node */}
+                    <rect x="200" y="40" width="100" height="55" rx="3" fill="#0f172a" stroke={rTelemetry.refrigerationTemp > 23.0 ? "#ef4444" : "#10b981"} strokeWidth="1.5" />
+                    <text x="208" y="55" className="text-[8px] font-mono" fill={rTelemetry.refrigerationTemp > 23.0 ? "#ef4444" : "#10b981"}>SYS AC & ETALAGE Temp</text>
+                    <text x="208" y="72" className="text-[10px] font-mono font-bold" fill="#ffffff">{rTelemetry.refrigerationTemp.toFixed(1)}°C</text>
                     
-                    {/* Customers queuing up at Checkouts */}
+                    {/* Customer queues at point of sale */}
                     <rect x="200" y="115" width="100" height="55" rx="3" fill="#1e293b" stroke="#475569" />
-                    <text x="208" y="128" className="text-[8px] font-mono" fill="#94a3b8">KASSA LINE</text>
+                    <text x="208" y="128" className="text-[8px] font-mono" fill="#94a3b8">KASSA DESIGN BALIE</text>
                     
-                    {/* Draw circles representing people in checkout queue */}
+                    {/* Draw circles representing shoppers queuing */}
                     {Array.from({ length: Math.min(6, rTelemetry.checkoutQueueLength) }).map((_, idx) => (
                       <circle key={idx} cx={220 + (idx * 13)} cy="145" r="5" fill="#f43f5e" />
                     ))}
-
-                    {/* Aisle customers indicator */}
+                    
+                    {/* Aisle shopper wave effect */}
                     {isAisleCrowded && (
                       <circle cx="55" cy="100" r="14" fill="#fbbf24" opacity="0.25" className="animate-ping" />
                     )}
                     
-                    <text x="30" y="160" className="text-[8px] font-mono" fill="#e2e8f0">Gang 1: Actief</text>
-                    <text x="120" y="160" className="text-[8px] font-mono" fill="#e2e8f0">Gang 2: Promotie</text>
+                    <text x="30" y="160" className="text-[8px] font-mono" fill="#e2e8f0">Regio: West (Premium)</text>
+                    <text x="120" y="160" className="text-[8px] font-mono" fill="#e2e8f0">Promo: Sneaker-Deal</text>
                   </svg>
                   <div className="text-[10px] text-center font-mono text-slate-400">
-                    Aisles Bezetting: {rTelemetry.aisleTraffic}p • Gem. mandwaarde: €{rTelemetry.averageBasketValue.toFixed(2)}
+                    Klantbezoek: {rTelemetry.aisleTraffic}p • Gem. orderwaarde: €{rTelemetry.averageBasketValue.toFixed(2)}
                   </div>
                 </div>
               );
