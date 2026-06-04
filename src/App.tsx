@@ -6,7 +6,7 @@ import { ChatMessage, TwinType } from "./types";
 import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/Dashboard";
-import { resilientAnalyze } from "./utils/geminiClient";
+import { resilientAnalyze } from "./utils/aiClient";
 
 export default function App() {
   const [currentTab, setTab] = useState<'landing' | 'dashboard' | 'ai-lab'>('landing');

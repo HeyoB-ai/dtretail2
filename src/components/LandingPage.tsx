@@ -6,7 +6,7 @@ import {
   Clock, Users, Award, ShieldAlert, BadgeCheck, PhoneCall, ArrowDown
 } from "lucide-react";
 import { TwinType } from "../types";
-import { resilientAnalyze } from "../utils/geminiClient";
+import { resilientAnalyze } from "../utils/aiClient";
 
 interface LandingPageProps {
   onStartTwin: (twin: 'qbtec' | 'woerden' | 'retail') => void;

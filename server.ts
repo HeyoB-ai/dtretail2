@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
 
 dotenv.config();
 
@@ -11,40 +10,18 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// Lazy initialization of Gemini SDK to prevent crashes on startup if GEMINI_API_KEY is missing.
-let aiClient: GoogleGenAI | null = null;
-
-function getAiClient(): GoogleGenAI {
-  if (!aiClient) {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error("GEMINI_API_KEY is niet ingesteld. Voeg deze toe in de Secrets van AI Studio.");
-    }
-    aiClient = new GoogleGenAI({
-      apiKey: apiKey,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
-        }
-      }
-    });
-  }
-  return aiClient;
-}
-
-// Cache or mock database for simple persistence of active setups if needed, 
-// but direct payload state passed from client is perfect for a living simulation dashboard.
-app.post("/api/gemini/analyze", async (req, res) => {
+// Proxy endpoint for Claude (Anthropic API)
+app.post("/api/claude/analyze", async (req, res) => {
   try {
-    const { message, activeTwin, telemetry, chatHistory } = req.body;
+    const { message, activeTwin, telemetry } = req.body;
 
-    if (!process.env.GEMINI_API_KEY) {
+    const claudeKey = process.env.CLAUDE_API_KEY || process.env.ANTHROPIC_API_KEY;
+
+    if (!claudeKey) {
       return res.status(500).json({ 
-        error: "GEMINI_API_KEY is niet ingesteld. Voeg deze toe in de Secrets van AI Studio." 
+        error: "Claude API Key (CLAUDE_API_KEY of ANTHROPIC_API_KEY) is niet gevonden in de omgevingsvariabelen." 
       });
     }
-
-    const ai = getAiClient();
 
     const systemInstruction = 
       "Je bent Leta, de slimme en geavanceerde AI Co-pilot van 'Let's Twin'. " +
@@ -54,35 +31,45 @@ app.post("/api/gemini/analyze", async (req, res) => {
       "Wanneer je reageert, baseer je antwoord specifiek op de live-telemety-bestanden en de geselecteerde Digital Twin die de gebruiker opstort. " +
       "Als er waarden buiten de veilige marge liggen (bijvoorbeeld: temperatuur robotarm > 75°C, trillingen windturbine > 8Hz), geef dan actieve aanbevelingen voor inspectie.";
 
-    // Format telemetry state clearly
     const telemetryContext = JSON.stringify(telemetry, null, 2);
-    
-    // Construct standard history if present
-    const contents = [
-      {
-        role: "user" as const,
-        parts: [{
-          text: `Context: De gebruiker bekijkt momenteel de Digital Twin: "${activeTwin}".\n` +
-                `Hier is de actuele live IoT telemetry van deze Digital Twin:\n${telemetryContext}\n\n` +
-                `Gebruikersboodschap: ${message}`
-        }]
-      }
-    ];
+    const userPrompt = `Context: De gebruiker bekijkt momenteel de Digital Twin: "${activeTwin}".\n` +
+                       `Hier is de actuele live IoT telemetry van deze Digital Twin:\n${telemetryContext}\n\n` +
+                       `Gebruikersboodschap: ${message}`;
 
-    // Call Gemini using the modern @google/genai SDK
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: contents,
-      config: {
-        systemInstruction: systemInstruction,
-        temperature: 0.7,
-      }
+    // Standard Claude API /v1/messages call via global fetch
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": claudeKey,
+        "anthropic-version": "2023-06-01"
+      },
+      body: JSON.stringify({
+        model: "claude-3-5-sonnet-20241022",
+        max_tokens: 1500,
+        system: systemInstruction,
+        messages: [
+          {
+            role: "user",
+            content: userPrompt
+          }
+        ],
+        temperature: 0.7
+      })
     });
 
-    res.json({ text: response.text });
+    if (!response.ok) {
+      const errJson = await response.json();
+      throw new Error(errJson?.error?.message || `Anthropic API error status: ${response.status}`);
+    }
+
+    const resJson = await response.json();
+    const resultText = resJson?.content?.[0]?.text || "Mijn excuses, ik kon geen reactie genereren van Claude.";
+
+    res.json({ text: resultText });
   } catch (error: any) {
-    console.error("Fout bij aanroepen Gemini API:", error);
-    res.status(500).json({ error: error.message || "Interne fout bij AI-analyse." });
+    console.error("Fout bij aanroepen Claude API:", error);
+    res.status(500).json({ error: error.message || "Interne fout bij AI-analyse via Claude." });
   }
 });
 
