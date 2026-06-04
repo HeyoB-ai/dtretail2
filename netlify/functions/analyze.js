@@ -69,7 +69,7 @@ export async function handler(event, context) {
             },
             body: JSON.stringify({
               model: model,
-              max_tokens: 1500,
+              max_tokens: 4000,
               system: systemInstruction,
               messages: [
                 {
