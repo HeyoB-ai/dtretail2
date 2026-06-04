@@ -36,31 +36,61 @@ app.post("/api/claude/analyze", async (req, res) => {
                        `Hier is de actuele live IoT telemetry van deze Digital Twin:\n${telemetryContext}\n\n` +
                        `Gebruikersboodschap: ${message}`;
 
-    // Standard Claude API /v1/messages call via global fetch
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": claudeKey,
-        "anthropic-version": "2023-06-01"
-      },
-      body: JSON.stringify({
-        model: "claude-3-5-sonnet-20241022",
-        max_tokens: 1500,
-        system: systemInstruction,
-        messages: [
-          {
-            role: "user",
-            content: userPrompt
-          }
-        ],
-        temperature: 0.7
-      })
-    });
+    // Standard Claude API /v1/messages call via global fetch with adaptive model fallbacks
+    const candidateModels = [
+      "claude-3-5-sonnet-latest",
+      "claude-3-5-sonnet-20241022",
+      "claude-3-5-sonnet-20240620",
+      "claude-3-5-haiku-20241022",
+      "claude-3-haiku-20240307"
+    ];
 
-    if (!response.ok) {
-      const errJson = await response.json();
-      throw new Error(errJson?.error?.message || `Anthropic API error status: ${response.status}`);
+    let response: any = null;
+    let lastErrorMsg = "";
+    let usedModel = "";
+
+    for (const model of candidateModels) {
+      try {
+        console.log(`Proberen Claude model: ${model}...`);
+        const tempResponse = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-api-key": claudeKey,
+            "anthropic-version": "2023-06-01"
+          },
+          body: JSON.stringify({
+            model: model,
+            max_tokens: 1500,
+            system: systemInstruction,
+            messages: [
+              {
+                role: "user",
+                content: userPrompt
+              }
+            ],
+            temperature: 0.7
+          })
+        });
+
+        if (tempResponse.ok) {
+          response = tempResponse;
+          usedModel = model;
+          console.log(`Succesvolle verbinding via model: ${usedModel}`);
+          break;
+        } else {
+          const errJson = await tempResponse.json().catch(() => ({}));
+          lastErrorMsg = errJson?.error?.message || `Status: ${tempResponse.status}`;
+          console.warn(`Model ${model} mislukt: ${lastErrorMsg}`);
+        }
+      } catch (err: any) {
+        lastErrorMsg = err.message || "Onbekende fout";
+        console.warn(`Fout tijdens verbinding met model ${model}: ${lastErrorMsg}`);
+      }
+    }
+
+    if (!response) {
+      throw new Error(`Alle AI-modellen zijn mislukt. Laatste foutmelding van Anthropic API: ${lastErrorMsg}`);
     }
 
     const resJson = await response.json();

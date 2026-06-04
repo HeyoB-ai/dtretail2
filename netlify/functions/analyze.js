@@ -56,38 +56,67 @@ export async function handler(event, context) {
                        `Hier is de actuele live IoT telemetry van deze Digital Twin:\n${telemetryContext}\n\n` +
                        `Gebruikersboodschap: ${message}`;
 
-    // Request Anthropic Claude Messages API
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": claudeKey,
-        "anthropic-version": "2023-06-01"
-      },
-      body: JSON.stringify({
-        model: "claude-3-5-sonnet-20241022",
-        max_tokens: 1500,
-        system: systemInstruction,
-        messages: [
-          {
-            role: "user",
-            content: userPrompt
-          }
-        ],
-        temperature: 0.7
-      })
-    });
+    // Request Anthropic Claude Messages API with adaptive model fallbacks
+    const candidateModels = [
+      "claude-3-5-sonnet-latest",
+      "claude-3-5-sonnet-20241022",
+      "claude-3-5-sonnet-20240620",
+      "claude-3-5-haiku-20241022",
+      "claude-3-haiku-20240307"
+    ];
 
-    if (!response.ok) {
-      const errJson = await response.json().catch(() => ({}));
+    let response = null;
+    let lastErrorMsg = "";
+    let usedModel = "";
+
+    for (const model of candidateModels) {
+      try {
+        console.log(`Proberen Claude model op Netlify: ${model}...`);
+        const tempResponse = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-api-key": claudeKey,
+            "anthropic-version": "2023-06-01"
+          },
+          body: JSON.stringify({
+            model: model,
+            max_tokens: 1500,
+            system: systemInstruction,
+            messages: [
+              {
+                role: "user",
+                content: userPrompt
+              }
+            ],
+            temperature: 0.7
+          })
+        });
+
+        if (tempResponse.ok) {
+          response = tempResponse;
+          usedModel = model;
+          break;
+        } else {
+          const errJson = await tempResponse.json().catch(() => ({}));
+          lastErrorMsg = errJson?.error?.message || `Status: ${tempResponse.status}`;
+          console.warn(`Model ${model} mislukt op Netlify: ${lastErrorMsg}`);
+        }
+      } catch (err) {
+        lastErrorMsg = err.message || "Onbekende fout";
+        console.warn(`Fout tijdens verbinding met model ${model} op Netlify: ${lastErrorMsg}`);
+      }
+    }
+
+    if (!response) {
       return {
-        statusCode: response.status,
+        statusCode: 400,
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
         },
-        body: JSON.stringify({ 
-          error: errJson?.error?.message || `Anthropic API error status: ${response.status}` 
+        body: JSON.stringify({
+          error: `Alle AI-modellen zijn mislukt. Laatste foutmelding van Anthropic API: ${lastErrorMsg}`
         }),
       };
     }
