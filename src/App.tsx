@@ -1,3 +1,4 @@
+// App component configured for Netlify and Serverless Claude routing
 import { useState } from "react";
 import { 
   Building2, Cpu, HelpCircle, ArrowRight, Layers, Sparkles, AlertCircle, ShoppingBag, Database, Radio, Wifi
