@@ -46,12 +46,12 @@ export async function handler(event, context) {
 
     // Request Anthropic Claude Messages API with adaptive model fallbacks
     const candidateModels = [
+      "claude-4-5-haiku",
       "claude-3-5-haiku-20241022",
       "claude-3-5-haiku-latest",
       "claude-3-5-sonnet-latest",
       "claude-3-5-sonnet-20241022",
-      "claude-3-5-sonnet-20240620",
-      "claude-3-haiku-20240307"
+      "claude-3-5-sonnet-20240620"
     ];
 
     let response = null;
