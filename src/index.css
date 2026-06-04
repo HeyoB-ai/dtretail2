@@ -80,3 +80,140 @@
 .animate-pulse-slow {
   animation: pulse-slow 6s ease-in-out infinite;
 }
+
+/* Print styles to isolate and print only the active report document beautifully */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+  
+  #root, #landing-page-root {
+    background: #ffffff !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Hide absolutely everything on the web page */
+  header, footer, section, form, #comparison-section, #live-twins-showcase, #roi-calculator, #philosophy-grid, #proposals-placeholder, .no-print, button {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Isolate the pilot tool container and remove grid structures */
+  #pilot-tool {
+    display: block !important;
+    visibility: visible !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Convert the multi-column parent layout into a full-page width layout and hide form column */
+  #pilot-tool > div {
+    display: block !important;
+    grid-template-columns: none !important;
+  }
+
+  /* Form column - hide completely in print */
+  #pilot-tool > div > div:first-child {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Output document container column - expand to fill the printable paper */
+  #pilot-tool > div > div:last-child {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    min-height: auto !important;
+  }
+
+  /* Main printed text area - disable height caps and scrolls so the entire text prints on paper */
+  .printable-document-body {
+    max-height: none !important;
+    overflow: visible !important;
+    height: auto !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Force headers to print beautifully on white paper */
+  .printable-document-body h2 {
+    color: #1e3a8a !important; /* Deep navy headings */
+    font-size: 16pt !important;
+    margin-top: 24pt !important;
+    margin-bottom: 12pt !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    padding-bottom: 6pt !important;
+    page-break-after: avoid !important;
+  }
+
+  .printable-document-body h3 {
+    color: #2b6cb0 !important;
+    font-size: 13pt !important;
+    margin-top: 18pt !important;
+    margin-bottom: 8pt !important;
+    page-break-after: avoid !important;
+  }
+
+  .printable-document-body h4 {
+    color: #4a5568 !important;
+    font-size: 11pt !important;
+    margin-top: 14pt !important;
+    margin-bottom: 6pt !important;
+    page-break-after: avoid !important;
+  }
+
+  .printable-document-body p,
+  .printable-document-body li,
+  .printable-document-body td {
+    color: #2d3748 !important;
+    font-size: 10pt !important;
+    line-height: 1.5 !important;
+    margin-bottom: 8pt !important;
+  }
+
+  .printable-document-body ul {
+    margin-bottom: 12pt !important;
+    padding-left: 20pt !important;
+  }
+
+  .printable-document-body li {
+    list-style-type: disc !important;
+  }
+
+  .printable-document-body hr {
+    border-color: #dee2e6 !important;
+    margin-top: 16pt !important;
+    margin-bottom: 16pt !important;
+  }
+
+  .printable-document-body strong {
+    color: #000000 !important;
+    font-weight: 700 !important;
+  }
+}
+

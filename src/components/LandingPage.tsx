@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import React, { useState, FormEvent } from "react";
 import { 
   ArrowRight, Cpu, Zap, Radio, Shield, Server, LineChart, 
   Building2, Eye, Sparkles, HelpCircle, ArrowUpRight, Play, Layers,
@@ -29,6 +29,61 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
   const [proposalResult, setProposalResult] = useState<string | null>(null);
   const [isGeneratingProposal, setIsGeneratingProposal] = useState<boolean>(false);
   const [proposalError, setProposalError] = useState<string | null>(null);
+
+  // Email status states
+  const [emailSending, setEmailSending] = useState<boolean>(false);
+  const [emailSentStatus, setEmailSentStatus] = useState<"success" | "error" | "simulated" | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [testEmailUrl, setTestEmailUrl] = useState<string | null>(null);
+
+  const sendEmailToUser = async (email: string, proposalText: string) => {
+    if (!email || !proposalText) return;
+    setEmailSending(true);
+    setEmailSentStatus(null);
+    setEmailError(null);
+    setTestEmailUrl(null);
+
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contactEmail: email,
+          companyName,
+          proposalSector,
+          challengeText: challengeText || "Algemene digitalisering en optimalisatie.",
+          proposalResult: proposalText
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || `Serverfout met status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        if (data.mode === "real") {
+          setEmailSentStatus("success");
+        } else if (data.mode === "simulated") {
+          setEmailSentStatus("simulated");
+          setTestEmailUrl(data.testUrl);
+        } else {
+          setEmailSentStatus("success");
+        }
+      } else {
+        throw new Error(data.error || "Onbekende fout bij e-mailverzending.");
+      }
+    } catch (err: any) {
+      console.error("Fout bij e-mailverzending frontend:", err);
+      setEmailSentStatus("error");
+      setEmailError(err.message || "Er kon geen e-mail worden verstuurd naar dit adres.");
+    } finally {
+      setEmailSending(false);
+    }
+  };
 
   // Preview twin metadata for iframes on the landing page
   const previewTwins = [
@@ -156,6 +211,8 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       });
 
       setProposalResult(resultText);
+      // Automatically send email once proposal is successfully generated
+      await sendEmailToUser(contactEmail, resultText);
     } catch (err: any) {
       console.error(err);
       setProposalError(err.message || "Er is een verbindingsfout opgetreden tijdens het genereren van uw voorstel.");
@@ -773,7 +830,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             {proposalResult ? (
               <div className="p-6 flex flex-col justify-between h-full space-y-4 animate-fade-in">
                 {/* Header of Proposal document */}
-                <div className="flex justify-between items-center pb-3 border-b border-white/5" id="proposals-viewer-header">
+                <div className="flex justify-between items-center pb-3 border-b border-white/5 no-print" id="proposals-viewer-header">
                   <div className="flex items-center space-x-2">
                     <FileText className="h-5 w-5 text-cyan-400 animate-pulse" />
                     <div>
@@ -785,19 +842,70 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                     onClick={() => {
                       if(typeof window !== "undefined") window.print();
                     }}
-                    className="cursor-pointer text-[10px] font-mono text-slate-450 border border-white/10 rounded px-2.5 py-1 hover:text-white hover:bg-white/5 transition-all"
+                    className="cursor-pointer text-[10px] font-mono text-slate-400 border border-white/10 rounded px-2.5 py-1 hover:text-white hover:bg-white/5 transition-all no-print"
                   >
                     Printers weergave
                   </button>
                 </div>
 
                 {/* Main Scrollable Report */}
-                <div className="flex-grow overflow-y-auto max-h-[380px] p-4 bg-black/40 rounded-xl border border-white/5 text-xs text-slate-300 leading-relaxed font-sans space-y-3.5 whitespace-pre-line mr-1">
-                  {proposalResult}
+                <div className="flex-grow overflow-y-auto max-h-[380px] p-4 bg-black/40 rounded-xl border border-white/5 text-xs text-slate-300 leading-relaxed font-sans mr-1 printable-document-body">
+                  {parseProposal(proposalResult)}
+                </div>
+
+                {/* Email Delivery Feedback Container */}
+                <div className="p-3.5 rounded-xl bg-black/30 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs no-print">
+                  {emailSending ? (
+                    <div className="flex items-center space-x-2 text-slate-400 font-mono text-[11px]">
+                      <span className="animate-spin h-3.5 w-3.5 border-2 border-cyan-400 border-t-transparent rounded-full shrink-0" />
+                      <span>E-mailbericht versturen naar {contactEmail}...</span>
+                    </div>
+                  ) : emailSentStatus === "success" ? (
+                    <div className="flex items-center space-x-2 text-emerald-400 font-mono text-[11px]">
+                      <Check className="h-4 w-4 shrink-0 text-emerald-400" />
+                      <span>E-mail succesvol verzonden naar <strong>{contactEmail}</strong>!</span>
+                    </div>
+                  ) : emailSentStatus === "simulated" ? (
+                    <div className="flex flex-col space-y-1 w-full">
+                      <div className="flex items-center space-x-2 text-amber-400 font-mono text-[11px]">
+                        <Check className="h-4 w-4 shrink-0 text-amber-400" />
+                        <span>E-mail verzonden naar <strong>{contactEmail}</strong> (test-simulatie)!</span>
+                      </div>
+                      {testEmailUrl && (
+                        <a 
+                          href={testEmailUrl} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          className="text-[9px] text-cyan-400 hover:underline flex items-center space-x-1"
+                        >
+                          <span>👉 Open test-mailbox om de ontworpen HTML-brief te bekijken</span>
+                        </a>
+                      )}
+                    </div>
+                  ) : emailSentStatus === "error" ? (
+                    <div className="flex items-center space-x-2 text-rose-400 font-mono text-[11px]">
+                      <AlertTriangle className="h-4 w-4 shrink-0 text-rose-400" />
+                      <span className="truncate max-w-[200px]">Fout: {emailError}</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2 text-slate-400 font-mono text-[11px]">
+                      <Send className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                      <span>Klaar om te zenden naar {contactEmail}</span>
+                    </div>
+                  )}
+
+                  {emailSentStatus !== "success" && emailSentStatus !== "simulated" && !emailSending && (
+                    <button
+                      onClick={() => sendEmailToUser(contactEmail, proposalResult)}
+                      className="cursor-pointer text-[10px] font-mono text-cyan-300 font-bold hover:text-white hover:bg-cyan-500/10 border border-cyan-500/20 rounded px-2.5 py-1 uppercase shrink-0 mt-1 sm:mt-0"
+                    >
+                      Verstuur Opnieuw
+                    </button>
+                  )}
                 </div>
 
                 {/* Final Booking Trigger */}
-                <div className="pt-3 border-t border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs">
+                <div className="pt-3 border-t border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs no-print">
                   <div>
                     <span className="block text-[10px] font-mono text-slate-500 font-bold uppercase">Leta AI Blueprint Compiler</span>
                     <span className="block text-[11px] text-emerald-400 font-mono font-semibold">Geproduceerd in {new Date().toLocaleDateString('nl-NL')}</span>
@@ -805,7 +913,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                   
                   <button
                     onClick={() => {
-                      alert(`Hartelijk dank voor uw interesse! Er is een simulatie-notificatie verstuurd naar ${contactEmail}. We sturen u direct een uitnodiging.`);
+                      alert(`Hartelijk dank voor uw interesse! Er is een e-mailbericht verstuurd naar ${contactEmail} met alle details van uw digital twin blueprint.`);
                     }}
                     className="cursor-pointer px-5 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] rounded-lg tracking-wider uppercase flex items-center justify-center space-x-1.5 transition-all"
                   >
@@ -918,3 +1026,105 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
     </div>
   );
 }
+
+// Custom Markdown parser to make AI proposal look gorgeous instead of plain text with markdown tags
+function parseProposal(text: string | null) {
+  if (!text) return null;
+  
+  const lines = text.split("\n");
+  const parsedElements: React.ReactNode[] = [];
+  
+  let listItems: React.ReactNode[] = [];
+
+  const flushList = (key: string | number) => {
+    if (listItems.length > 0) {
+      parsedElements.push(
+        <ul key={`list-${key}`} className="space-y-2.5 my-3 pl-5 list-disc list-outside text-slate-300 leading-relaxed font-sans">
+          {...listItems}
+        </ul>
+      );
+      listItems = [];
+    }
+  };
+
+  const processBoldText = (txt: string) => {
+    const parts = txt.split("**");
+    return parts.map((part, i) => {
+      if (i % 2 === 1) {
+        return <strong key={part + i} className="text-cyan-400 font-extrabold">{part}</strong>;
+      }
+      return part;
+    });
+  };
+
+  lines.forEach((line, index) => {
+    const trimmedLine = line.trim();
+
+    if (trimmedLine === "---" || trimmedLine === "___" || trimmedLine === "***") {
+      flushList(index);
+      parsedElements.push(
+        <hr key={index} className="border-white/10 my-4" />
+      );
+      return;
+    }
+
+    if (trimmedLine.startsWith("# ")) {
+      flushList(index);
+      const headerText = trimmedLine.substring(2);
+      parsedElements.push(
+        <h2 key={index} className="text-lg sm:text-xl font-bold font-display text-white mt-6 mb-3 border-b border-white/10 pb-1.5 tracking-tight uppercase">
+          {processBoldText(headerText)}
+        </h2>
+      );
+      return;
+    }
+
+    if (trimmedLine.startsWith("## ")) {
+      flushList(index);
+      const headerText = trimmedLine.substring(3);
+      parsedElements.push(
+        <h3 key={index} className="text-sm sm:text-base font-bold font-display text-white mt-4 mb-2 border-l-2 border-blue-500 pl-3">
+          {processBoldText(headerText)}
+        </h3>
+      );
+      return;
+    }
+
+    if (trimmedLine.startsWith("### ")) {
+      flushList(index);
+      const headerText = trimmedLine.substring(4);
+      parsedElements.push(
+        <h4 key={index} className="text-xs sm:text-sm font-mono font-bold text-cyan-400 mt-3 mb-1 uppercase tracking-wide">
+          {processBoldText(headerText)}
+        </h4>
+      );
+      return;
+    }
+
+    if (trimmedLine.startsWith("- ") || trimmedLine.startsWith("* ")) {
+      const bulletText = trimmedLine.substring(2);
+      listItems.push(
+        <li key={index} className="text-xs sm:text-sm text-slate-300 leading-relaxed py-0.5">
+          {processBoldText(bulletText)}
+        </li>
+      );
+      return;
+    }
+
+    if (trimmedLine === "") {
+      flushList(index);
+      parsedElements.push(<div key={index} className="h-2" />);
+    } else {
+      flushList(index);
+      parsedElements.push(
+        <p key={index} className="text-xs sm:text-sm text-slate-350 leading-relaxed font-sans mb-3">
+          {processBoldText(line)}
+        </p>
+      );
+    }
+  });
+
+  flushList("final");
+  return parsedElements;
+}
+
