@@ -1,0 +1,18 @@
+# netlify.toml - Configuration file for Netlify deployments
+# This ensures that frontend requests to /api/claude/analyze are automatically handled by the serverless function
+# without triggering CORS errors or key exposure, while preserving standard SPA routing.
+
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[[redirects]]
+  from = "/api/claude/analyze"
+  to = "/.netlify/functions/analyze"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
