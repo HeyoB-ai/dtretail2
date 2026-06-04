@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
+import { GoogleGenAI } from "@google/genai";
 
 dotenv.config();
 
@@ -38,10 +39,11 @@ app.post("/api/claude/analyze", async (req, res) => {
 
     // Standard Claude API /v1/messages call via global fetch with adaptive model fallbacks
     const candidateModels = [
+      "claude-3-5-haiku-20241022",
+      "claude-3-5-haiku-latest",
       "claude-3-5-sonnet-latest",
       "claude-3-5-sonnet-20241022",
       "claude-3-5-sonnet-20240620",
-      "claude-3-5-haiku-20241022",
       "claude-3-haiku-20240307"
     ];
 
@@ -49,52 +51,89 @@ app.post("/api/claude/analyze", async (req, res) => {
     let lastErrorMsg = "";
     let usedModel = "";
 
-    for (const model of candidateModels) {
+    if (claudeKey && claudeKey.trim() !== "" && !claudeKey.startsWith("YOUR_")) {
+      for (const model of candidateModels) {
+        try {
+          console.log(`Proberen Claude model: ${model}...`);
+          const tempResponse = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              "x-api-key": claudeKey,
+              "anthropic-version": "2023-06-01"
+            },
+            body: JSON.stringify({
+              model: model,
+              max_tokens: 1500,
+              system: systemInstruction,
+              messages: [
+                {
+                  role: "user",
+                  content: userPrompt
+                }
+              ],
+              temperature: 0.7
+            })
+          });
+
+          if (tempResponse.ok) {
+            response = tempResponse;
+            usedModel = model;
+            console.log(`Succesvolle verbinding via model: ${usedModel}`);
+            break;
+          } else {
+            const errJson = await tempResponse.json().catch(() => ({}));
+            lastErrorMsg = errJson?.error?.message || `Status: ${tempResponse.status}`;
+            console.warn(`Model ${model} mislukt: ${lastErrorMsg}`);
+          }
+        } catch (err: any) {
+          lastErrorMsg = err.message || "Onbekende fout";
+          console.warn(`Fout tijdens verbinding met model ${model}: ${lastErrorMsg}`);
+        }
+      }
+    } else {
+      lastErrorMsg = "Geen geldige Claude API-sleutel (CLAUDE_API_KEY of ANTHROPIC_API_KEY) gedefinieerd in je omgevingsvariabelen.";
+    }
+
+    let resultText = "";
+
+    if (response) {
+      const resJson = await response.json();
+      resultText = resJson?.content?.[0]?.text || "Mijn excuses, ik kon geen reactie genereren van Claude.";
+    } else {
+      // Automatic fallback to Gemini so the app NEVER fails for the end user!
+      console.log(`Claude is mislukt (${lastErrorMsg}). Schakelen naar Gemini Co-pilot...`);
       try {
-        console.log(`Proberen Claude model: ${model}...`);
-        const tempResponse = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            "x-api-key": claudeKey,
-            "anthropic-version": "2023-06-01"
+        const geminiKey = process.env.GEMINI_API_KEY;
+        if (!geminiKey) {
+          throw new Error("Geen actieve GEMINI_API_KEY geconfigureerd in de backend.");
+        }
+        
+        const ai = new GoogleGenAI({ apiKey: geminiKey });
+        const geminiRes = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          config: {
+            systemInstruction: systemInstruction,
+            temperature: 0.7,
+            maxOutputTokens: 1500,
           },
-          body: JSON.stringify({
-            model: model,
-            max_tokens: 1500,
-            system: systemInstruction,
-            messages: [
-              {
-                role: "user",
-                content: userPrompt
-              }
-            ],
-            temperature: 0.7
-          })
+          contents: [userPrompt],
         });
 
-        if (tempResponse.ok) {
-          response = tempResponse;
-          usedModel = model;
-          console.log(`Succesvolle verbinding via model: ${usedModel}`);
-          break;
-        } else {
-          const errJson = await tempResponse.json().catch(() => ({}));
-          lastErrorMsg = errJson?.error?.message || `Status: ${tempResponse.status}`;
-          console.warn(`Model ${model} mislukt: ${lastErrorMsg}`);
-        }
-      } catch (err: any) {
-        lastErrorMsg = err.message || "Onbekende fout";
-        console.warn(`Fout tijdens verbinding met model ${model}: ${lastErrorMsg}`);
+        const geminiText = geminiRes.text || "Kon geen reactie genereren via de Gemini Co-pilot.";
+        resultText = 
+          `⚠️ **Leta AI Co-pilot status update**: Je Claude API Key of model gaf een foutmelding (*"${lastErrorMsg}"*).\n\n` +
+          `Om onderbreking te voorkomen, ben ik automatisch overgeschakeld naar het stabiele back-up model: **Gemini 2.5 Flash**.\n\n` +
+          `***\n\n` +
+          geminiText;
+      } catch (geminiErr: any) {
+        throw new Error(
+          `Zowel Claude als de Gemini back-up zijn mislukt.\n` +
+          `Laatste Claude Fout: ${lastErrorMsg}\n` +
+          `Gemini Fallback Fout: ${geminiErr.message}`
+        );
       }
     }
-
-    if (!response) {
-      throw new Error(`Alle AI-modellen zijn mislukt. Laatste foutmelding van Anthropic API: ${lastErrorMsg}`);
-    }
-
-    const resJson = await response.json();
-    const resultText = resJson?.content?.[0]?.text || "Mijn excuses, ik kon geen reactie genereren van Claude.";
 
     res.json({ text: resultText });
   } catch (error: any) {
