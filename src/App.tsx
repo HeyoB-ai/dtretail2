@@ -6,6 +6,7 @@ import { ChatMessage, TwinType } from "./types";
 import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/Dashboard";
+import { resilientAnalyze } from "./utils/geminiClient";
 
 export default function App() {
   const [currentTab, setTab] = useState<'landing' | 'dashboard' | 'ai-lab'>('landing');
@@ -56,30 +57,17 @@ export default function App() {
     setAiError(null);
 
     try {
-      // Fetch response from server-side Gemini endpoint
-      const response = await fetch("/api/gemini/analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: text,
-          activeTwin: twinContext,
-          telemetry: telemetryContext || { info: "Geen rechtstreekse telemetry meegezonden. Analyseer het algemene Let's-Twin platform." },
-          chatHistory: messages.slice(-10) // Send recent context
-        })
+      // Fetch response using resilient Gemini client
+      const rawText = await resilientAnalyze({
+        message: text,
+        activeTwin: twinContext,
+        telemetry: telemetryContext || { info: "Geen rechtstreekse telemetry meegezonden. Analyseer het algemene Let's-Twin platform." }
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Fout bij ophalen van resultaat.");
-      }
 
       const aiMsg: ChatMessage = {
         id: `ai-${Date.now()}`,
         sender: "ai",
-        text: data.text || "Excuus, ik kon geen analyse genereren.",
+        text: rawText,
         timestamp: new Date()
       };
 

@@ -6,6 +6,7 @@ import {
   Clock, Users, Award, ShieldAlert, BadgeCheck, PhoneCall, ArrowDown
 } from "lucide-react";
 import { TwinType } from "../types";
+import { resilientAnalyze } from "../utils/geminiClient";
 
 interface LandingPageProps {
   onStartTwin: (twin: 'qbtec' | 'woerden' | 'retail') => void;
@@ -135,38 +136,26 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
     setProposalError(null);
 
     try {
-      const response = await fetch("/api/gemini/analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
+      const resultText = await resilientAnalyze({
+        activeTwin: 'general_consulting',
+        telemetry: {
+          companyName,
+          proposalSector,
+          contactEmail,
+          challengeText: challengeText || "Algemene digitalisering en optimalisatie."
         },
-        body: JSON.stringify({
-          activeTwin: 'general_consulting',
-          telemetry: {
-            companyName,
-            proposalSector,
-            contactEmail,
-            challengeText: challengeText || "Algemene digitalisering en optimalisatie."
-          },
-          message: `Genereer een uiterst professioneel en overtuigend B2B Digital Twin & Dashboard Pilot Project Voorstel voor het bedrijf '${companyName}' actief in de sector '${proposalSector}'. ` +
-                   `Hun belangrijkste uitdaging is: '${challengeText || "Ze willen live inzicht en predictive alerts op hun operationele data."}'. ` +
-                   `Structuur het rapport heel duidelijk met de volgende Nederlandse koppen om een professionele indruk achter te laten:\n` +
-                   `- **1. EXECUTIVE SAMENVATTING**: Waarom een digital twin cruciaal is voor ${companyName} om hun uitdaging aan te pakken.\n` +
-                   `- **2. ARCHITECTUUR & SENSOR-DATA** (Modbus/LoRaWAN/API koppelingen gebaseerd op hun sector).\n` +
-                   `- **3. HET LIVE INTERACTIEVE DASHBOARD**: Beschrijf welke KPI's we live gaan visualiseren en de voordelen van een 'Wat-Als' scenario-simulator.\n` +
-                   `- **4. PREDICTIEF ADVIES DOOR CO-PILOT LETA**: Hoe onze AI-module hen helpt storingen te vermijden.\n` +
-                   `- **5. PILOT PROJECT PLANNING & KOSTEN**: Een strakke 4-weken roadmap met een geschatte ROI.\n` +
-                   `Gebruik een bemoedigende, overtuigende, deskundige toon en vermijd vage placeholders. Schrijf direct alsof je hun expert-consultant bent.`
-        })
+        message: `Genereer een uiterst professioneel en overtuigend B2B Digital Twin & Dashboard Pilot Project Voorstel voor het bedrijf '${companyName}' actief in de sector '${proposalSector}'. ` +
+                 `Hun belangrijkste uitdaging is: '${challengeText || "Ze willen live inzicht en predictive alerts op hun operationele data."}'. ` +
+                 `Structuur het rapport heel duidelijk met de volgende Nederlandse koppen om een professionele indruk achter te laten:\n` +
+                 `- **1. EXECUTIVE SAMENVATTING**: Waarom een digital twin cruciaal is voor ${companyName} om hun uitdaging aan te pakken.\n` +
+                 `- **2. ARCHITECTUUR & SENSOR-DATA** (Modbus/LoRaWAN/API koppelingen gebaseerd op hun sector).\n` +
+                 `- **3. HET LIVE INTERACTIEVE DASHBOARD**: Beschrijf welke KPI's we live gaan visualiseren en de voordelen van een 'Wat-Als' scenario-simulator.\n` +
+                 `- **4. PREDICTIEF ADVIES DOOR CO-PILOT LETA**: Hoe onze AI-module hen helpt storingen te vermijden.\n` +
+                 `- **5. PILOT PROJECT PLANNING & KOSTEN**: Een strakke 4-weken roadmap met een geschatte ROI.\n` +
+                 `Gebruik een bemoedigende, overtuigende, deskundige toon en vermijd vage placeholders. Schrijf direct alsof je hun expert-consultant bent.`
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Kon geen voorstel genereren.");
-      }
-
-      setProposalResult(data.text);
+      setProposalResult(resultText);
     } catch (err: any) {
       console.error(err);
       setProposalError(err.message || "Er is een verbindingsfout opgetreden tijdens het genereren van uw voorstel.");
