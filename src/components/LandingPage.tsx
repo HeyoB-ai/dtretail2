@@ -5,6 +5,8 @@ import {
   Calculator, DollarSign, Calendar, Check, Send, AlertTriangle, FileText,
   Clock, Users, Award, ShieldAlert, BadgeCheck, PhoneCall, ArrowDown
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { TwinType } from "../types";
 import { resilientAnalyze } from "../utils/aiClient";
 
@@ -871,8 +873,8 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                 </div>
 
                 {/* Main Scrollable Report */}
-                <div className="flex-grow overflow-y-auto max-h-[380px] p-4 bg-black/40 rounded-xl border border-white/5 text-xs text-slate-300 leading-relaxed font-sans whitespace-pre-line mr-1 printable-document-body">
-                  {proposalResult}
+                <div className="flex-grow overflow-y-auto max-h-[380px] p-4 bg-black/40 rounded-xl border border-white/5 text-xs text-slate-300 leading-relaxed font-sans mr-1 printable-document-body">
+                  {parseProposal(proposalResult)}
                 </div>
 
                 {/* Email Delivery Feedback Container */}
@@ -1046,6 +1048,114 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
         </div>
       </footer>
     </div>
+  );
+}
+
+// Custom simple parser to render beautiful, quiet business documents with NO loud neon/screaming headings
+function parseProposal(text: string | null) {
+  if (!text) return null;
+
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        h1: ({ children }) => (
+          <h1 className="text-sm font-bold text-white mt-6 mb-2 border-b border-white/10 pb-1.5 uppercase tracking-wider font-sans">
+            {children}
+          </h1>
+        ),
+        h2: ({ children }) => (
+          <h2 className="text-sm font-bold text-white mt-5 mb-2 uppercase tracking-wide font-sans">
+            {children}
+          </h2>
+        ),
+        h3: ({ children }) => (
+          <h3 className="text-xs font-bold text-white mt-4 mb-1.5 uppercase tracking-wide font-sans">
+            {children}
+          </h3>
+        ),
+        h4: ({ children }) => (
+          <h4 className="text-xs font-semibold text-slate-200 mt-3.5 mb-1 font-sans">
+            {children}
+          </h4>
+        ),
+        h5: ({ children }) => (
+          <h5 className="text-[11px] font-normal text-slate-305 italic mt-3 mb-1 font-sans">
+            {children}
+          </h5>
+        ),
+        h6: ({ children }) => (
+          <h6 className="text-[11px] font-normal text-slate-400 italic mt-3 mb-1 font-sans">
+            {children}
+          </h6>
+        ),
+        p: ({ children }) => (
+          <p className="text-xs text-slate-300 leading-relaxed font-sans mb-3 last:mb-0">
+            {children}
+          </p>
+        ),
+        ul: ({ children }) => (
+          <ul className="space-y-1.5 my-3 pl-5 list-disc text-slate-300 leading-relaxed font-sans list-outside">
+            {children}
+          </ul>
+        ),
+        ol: ({ children }) => (
+          <ol className="space-y-1.5 my-3 pl-5 list-decimal text-slate-300 leading-relaxed font-sans list-outside">
+            {children}
+          </ol>
+        ),
+        li: ({ children }) => (
+          <li className="text-xs text-slate-300 py-0.5 leading-relaxed font-sans">
+            {children}
+          </li>
+        ),
+        strong: ({ children }) => (
+          <strong className="font-bold text-white">
+            {children}
+          </strong>
+        ),
+        hr: () => <hr className="border-white/10 my-4" />,
+        table: ({ children }) => (
+          <div className="overflow-x-auto my-4 rounded-lg border border-white/5 bg-black/25">
+            <table className="min-w-full divide-y divide-white/5">
+              {children}
+            </table>
+          </div>
+        ),
+        thead: ({ children }) => (
+          <thead className="bg-white/5">
+            {children}
+          </thead>
+        ),
+        tbody: ({ children }) => (
+          <tbody className="divide-y divide-white/5">
+            {children}
+          </tbody>
+        ),
+        tr: ({ children }) => (
+          <tr className="hover:bg-white/[0.01]">
+            {children}
+          </tr>
+        ),
+        th: ({ children }) => (
+          <th className="px-3 py-2 text-left text-[10px] font-bold text-slate-300 uppercase tracking-wider border-b border-white/10 font-sans">
+            {children}
+          </th>
+        ),
+        td: ({ children }) => (
+          <td className="px-3 py-2 text-xs text-slate-400 font-sans">
+            {children}
+          </td>
+        ),
+        code: ({ children }) => (
+          <code className="bg-white/10 px-1 py-0.5 rounded text-[10px] font-mono text-cyan-400">
+            {children}
+          </code>
+        ),
+      }}
+    >
+      {text}
+    </ReactMarkdown>
   );
 }
 
