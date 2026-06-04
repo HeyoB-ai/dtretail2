@@ -357,6 +357,139 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
         </div>
       </section>
 
+      {/* COMPARISON: DASHBOARD VS DIGITAL TWIN */}
+      <section className="px-4 py-16 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full z-10 border-t border-white/5 bg-gradient-to-b from-transparent to-[#0A0D18]/40" id="comparison-section">
+        <div className="text-center mb-12">
+          <span className="text-xs font-mono text-purple-400 uppercase tracking-widest block mb-1">CRAFTED INSIGHT</span>
+          <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-3 tracking-tight">
+            Van Dashboard naar Digital Twin
+          </h2>
+          <p className="text-slate-405 max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed">
+            De meeste ondernemingen hebben business intelligence. Weinigen hebben een twin. En dat verschil is precies het verschil tussen terugkijken en vooruit sturen.
+          </p>
+        </div>
+
+        <div className="grid gap-8 lg:grid-cols-12 items-start mb-12">
+          {/* PowerBI / Qlik Box */}
+          <div className="lg:col-span-5 p-6 rounded-2xl border border-white/10 bg-[#0A0D18]/50 backdrop-blur-sm space-y-4">
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+                <LineChart className="h-4.5 w-4.5 text-yellow-500" />
+              </div>
+              <h3 className="text-white text-base font-extrabold font-display uppercase tracking-wider">Wat Qlik & Power BI goed doen</h3>
+            </div>
+            
+            <p className="text-slate-400 text-xs leading-relaxed font-sans">
+              Laten we eerlijk zijn: tools als Qlik en Power BI zijn uitstekend. Ze brengen data uit al je systemen samen, bouwen overzichtelijke dashboards en KPI's, en laten je tot op detailniveau inzoomen op wat er is gebeurd. Voor rapportage en monitoring zijn ze onmisbaar.
+            </p>
+
+            <div className="pt-4 border-t border-white/5 space-y-3">
+              <span className="text-[10px] font-mono tracking-widest text-yellow-500 uppercase font-bold block">Waar het stopt: we kijken achteruit</span>
+              <p className="text-slate-400 text-xs leading-relaxed font-sans">
+                Maar een dashboard is een achteruitkijkspiegel. Het laat het verleden en het heden scherp zien — alleen <strong>modelleert</strong> het je onderneming niet. Voorspellingen zijn statistische doortrekkingen van historie, geen levend model dat reageert op jóuw beslissingen. En een grafiek vraagt om het oog van een analist: de filiaalmanager ziet staafdiagrammen, niet zijn fysieke winkel.
+              </p>
+            </div>
+          </div>
+
+          {/* Digital Twin Box */}
+          <div className="lg:col-span-7 p-6 rounded-2xl border border-blue-500/25 bg-blue-500/5 backdrop-blur-sm space-y-5">
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                <Zap className="h-4.5 w-4.5 text-blue-400 animate-pulse" />
+              </div>
+              <h3 className="text-white text-base font-extrabold font-display uppercase tracking-wider">Wat een Digital Twin toevoegt</h3>
+            </div>
+
+            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-sans font-semibold">
+              Een digital twin is een levend, interactief model van je operatie dat de werkelijkheid nabootst en actief meebeweegt met wat jij invoert of simuleert.
+            </p>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+                <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Wat-als zonder risico</span>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  Draai aan prijs, personeelsbezetting, een weerscenario of voorraad — en zie omzet, marge, EBITDA en GMROI meteen meebewegen. Je experimenteert met een beslissing vóórdat je 'm in het echt neemt.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+                <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Beschrijvend + Voorspellend + Advisered</span>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  Niet alleen "wat is er gebeurd", maar "wat gebeurt er als…" — en, met de ingebouwde AI-adviseur, "wat zou ik moeten doen?". Alles in één drempelvrije omgeving.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+                <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Live data én simulatie</span>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  De twin trekt uit kassa, voorraad, bezoekerstellers en het weer, en projecteert vooruit—direct gebaseerd op externe live invloeden.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+                <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Visueel & Intuïtief</span>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  Je ziet direct je filialen, je winkelvloer of je machines—geen abstracte stapels grafieken. Iedereen op de werkvloer begrijpt de impact in een oogwenk.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* High Contrast Comparison Table */}
+        <div className="rounded-2xl border border-white/10 bg-black/40 overflow-hidden shadow-2xl">
+          <div className="p-5.5 border-b border-white/5 bg-[#090C16]">
+            <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest block mb-0.5">De kern in één beeld</span>
+            <p className="text-xs font-sans text-slate-300">
+              BI is de achteruitkijkspiegel. De digital twin is de <strong>vluchtsimulator</strong>. BI vertelt je de temperatuur; de twin laat je behandelingen uitproberen.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left font-sans text-xs min-w-[500px]">
+              <thead>
+                <tr className="border-b border-white/10 bg-[#0E1220]/60 text-slate-400 uppercase tracking-wider text-[10px] font-mono font-bold">
+                  <th className="p-4.5">Kenmerk</th>
+                  <th className="p-4.5 border-l border-white/5 text-yellow-500/90">Business Intelligence (Qlik, Power BI)</th>
+                  <th className="p-4.5 border-l border-white/5 text-blue-400">Digital Twin (Let's-Twin)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5 leading-normal text-slate-300">
+                <tr className="hover:bg-white/5 transition-colors">
+                  <td className="p-4.5 font-bold text-white">Kernvraag</td>
+                  <td className="p-4.5 border-l border-white/5 text-slate-400">Wat is er gebeurd?</td>
+                  <td className="p-4.5 border-l border-white/5 font-semibold text-white">Wat gebeurt er als…? En wat moeten we doen?</td>
+                </tr>
+                <tr className="hover:bg-white/5 transition-colors">
+                  <td className="p-4.5 font-bold text-white">Aard</td>
+                  <td className="p-4.5 border-l border-white/5 text-slate-400">Rapportage en dashboards</td>
+                  <td className="p-4.5 border-l border-white/5 font-semibold text-white">Levend, interactief vloeibaar model</td>
+                </tr>
+                <tr className="hover:bg-white/5 transition-colors">
+                  <td className="p-4.5 font-bold text-white">Tijdshorizon</td>
+                  <td className="p-4.5 border-l border-white/5 text-slate-400">Verleden en heden (terugblikkend)</td>
+                  <td className="p-4.5 border-l border-white/5 font-semibold text-white">Heden én direct gesimuleerde toekomst</td>
+                </tr>
+                <tr className="hover:bg-white/5 transition-colors">
+                  <td className="p-4.5 font-bold text-white">Gebruikscyclus</td>
+                  <td className="p-4.5 border-l border-white/5 text-slate-400">Analyseren van trends</td>
+                  <td className="p-4.5 border-l border-white/5 font-semibold text-white">Direct experimenteren, beslissen en bijsturen</td>
+                </tr>
+                <tr className="hover:bg-white/5 transition-colors">
+                  <td className="p-4.5 font-bold text-white">Doelpubliek</td>
+                  <td className="p-4.5 border-l border-white/5 text-slate-400">Vooral analisten en controllers</td>
+                  <td className="p-4.5 border-l border-white/5 font-semibold text-white">Iedereen: van directie tot op de werkvloer</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="p-5.5 bg-[#090C16] text-[11px] text-slate-450 border-t border-white/5 text-center font-mono">
+            <span>Niet óf-óf, maar bovenop. Een twin vervangt uw BI niet — hij bouwt erop voort en maakt er een veilige speeltuin van.</span>
+          </div>
+        </div>
+      </section>
+
       {/* 3. BUSINESS METHODOLOGY SECTION */}
       <section className="px-4 py-16 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full z-10 border-t border-white/5 bg-[#07090F]/45">
         <div className="text-center mb-12">
