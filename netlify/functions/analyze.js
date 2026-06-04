@@ -46,6 +46,7 @@ export async function handler(event, context) {
 
     // Request Anthropic Claude Messages API with adaptive model fallbacks
     const candidateModels = [
+      "claude-4.5-haiku",
       "claude-4-5-haiku",
       "claude-3-5-haiku-20241022",
       "claude-3-5-haiku-latest",
@@ -55,7 +56,7 @@ export async function handler(event, context) {
     ];
 
     let response = null;
-    let lastErrorMsg = "";
+    const modelErrors = {};
     let usedModel = "";
 
     if (hasClaudeKey) {
@@ -89,17 +90,23 @@ export async function handler(event, context) {
             break;
           } else {
             const errJson = await tempResponse.json().catch(() => ({}));
-            lastErrorMsg = errJson?.error?.message || `Status: ${tempResponse.status}`;
-            console.warn(`Model ${model} mislukt op Netlify: ${lastErrorMsg}`);
+            const errMsg = errJson?.error?.message || `Status: ${tempResponse.status}`;
+            modelErrors[model] = errMsg;
+            console.warn(`Model ${model} mislukt op Netlify: ${errMsg}`);
           }
         } catch (err) {
-          lastErrorMsg = err.message || "Onbekende fout";
-          console.warn(`Fout tijdens verbinding met model ${model} op Netlify: ${lastErrorMsg}`);
+          const errMsg = err.message || "Onbekende fout";
+          modelErrors[model] = errMsg;
+          console.warn(`Fout tijdens verbinding met model ${model} op Netlify: ${errMsg}`);
         }
       }
     } else {
-      lastErrorMsg = "Geen geldige Claude API-sleutel ingesteld op Netlify.";
+      modelErrors["claude-config"] = "Geen geldige Claude API-sleutel ingesteld op Netlify.";
     }
+
+    const detailedErrors = Object.entries(modelErrors)
+      .map(([m, err]) => `• **${m}**: ${err}`)
+      .join("\n");
 
     let resultText = "";
 
@@ -108,7 +115,7 @@ export async function handler(event, context) {
       resultText = resJson?.content?.[0]?.text || "Mijn excuses, ik kon geen reactie genereren van Claude.";
     } else {
       // Automatic fallback to zero-dependency Gemini REST API inside Netlify func
-      console.log(`Claude is mislukt op Netlify (${lastErrorMsg}). Schakelen naar Gemini...`);
+      console.log(`Claude is mislukt op Netlify. Schakelen naar Gemini...`);
       const geminiKey = process.env.GEMINI_API_KEY;
       if (!geminiKey) {
         return {
@@ -118,7 +125,7 @@ export async function handler(event, context) {
             "Access-Control-Allow-Origin": "*",
           },
           body: JSON.stringify({
-            error: `De Claude API verbinding is mislukt vanwege foutmelding: ("${lastErrorMsg}"). Er is geen back-up GEMINI_API_KEY geconfigureerd in de Netlify Site Settings om dit automatisch op te vangen.`
+            error: `De Claude API verbinding is mislukt. De volgende modellen zijn geprobeerd:\n\n${detailedErrors}\n\nEr is geen back-up GEMINI_API_KEY geconfigureerd in de Netlify Site Settings om dit automatisch op te vangen.`
           }),
         };
       }
@@ -148,7 +155,7 @@ export async function handler(event, context) {
         const geminiText = geminiResJson.candidates?.[0]?.content?.parts?.[0]?.text || "Kon geen reactie genereren van de Gemini Co-pilot.";
 
         resultText = 
-          `⚠️ **Leta AI Co-pilot status update**: Je Claude API Key of model gaf een foutmelding (*"${lastErrorMsg}"*).\n\n` +
+          `⚠️ **Leta AI Co-pilot status update**: Je Claude API Key of model gaf een foutmelding. De volgende modellen zijn geprobeerd:\n\n${detailedErrors}\n\n` +
           `Om onderbreking te voorkomen, ben ik automatisch overgeschakeld naar het stabiele back-up model: **Gemini 2.5 Flash**.\n\n` +
           `***\n\n` +
           geminiText;
@@ -161,7 +168,7 @@ export async function handler(event, context) {
             "Access-Control-Allow-Origin": "*",
           },
           body: JSON.stringify({
-            error: `Zowel Claude als Gemini-backups zijn mislukt op Netlify.\nClaude Fout: ${lastErrorMsg}\nGemini Fout: ${geminiErr.message || geminiErr}`
+            error: `Zowel alle Claude-modellen als de Gemini-backup zijn mislukt op Netlify.\n\nDetails Claude model pogingen:\n${detailedErrors}\n\nGemini back-up foutmelding: ${geminiErr.message || geminiErr}`
           }),
         };
       }

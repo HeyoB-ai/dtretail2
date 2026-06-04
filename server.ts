@@ -39,6 +39,7 @@ app.post("/api/claude/analyze", async (req, res) => {
 
     // Standard Claude API /v1/messages call via global fetch with adaptive model fallbacks
     const candidateModels = [
+      "claude-4.5-haiku",
       "claude-4-5-haiku",
       "claude-3-5-haiku-20241022",
       "claude-3-5-haiku-latest",
@@ -48,7 +49,7 @@ app.post("/api/claude/analyze", async (req, res) => {
     ];
 
     let response: any = null;
-    let lastErrorMsg = "";
+    const modelErrors: Record<string, string> = {};
     let usedModel = "";
 
     if (claudeKey && claudeKey.trim() !== "" && !claudeKey.startsWith("YOUR_")) {
@@ -83,17 +84,23 @@ app.post("/api/claude/analyze", async (req, res) => {
             break;
           } else {
             const errJson = await tempResponse.json().catch(() => ({}));
-            lastErrorMsg = errJson?.error?.message || `Status: ${tempResponse.status}`;
-            console.warn(`Model ${model} mislukt: ${lastErrorMsg}`);
+            const errMsg = errJson?.error?.message || `Status: ${tempResponse.status}`;
+            modelErrors[model] = errMsg;
+            console.warn(`Model ${model} mislukt: ${errMsg}`);
           }
         } catch (err: any) {
-          lastErrorMsg = err.message || "Onbekende fout";
-          console.warn(`Fout tijdens verbinding met model ${model}: ${lastErrorMsg}`);
+          const errMsg = err.message || "Onbekende fout";
+          modelErrors[model] = errMsg;
+          console.warn(`Fout tijdens verbinding met model ${model}: ${errMsg}`);
         }
       }
     } else {
-      lastErrorMsg = "Geen geldige Claude API-sleutel (CLAUDE_API_KEY of ANTHROPIC_API_KEY) gedefinieerd in je omgevingsvariabelen.";
+      modelErrors["claude-config"] = "Geen geldige Claude API-sleutel (CLAUDE_API_KEY of ANTHROPIC_API_KEY) gedefinieerd in je omgevingsvariabelen.";
     }
+
+    const detailedErrors = Object.entries(modelErrors)
+      .map(([m, err]) => `• **${m}**: ${err}`)
+      .join("\n");
 
     let resultText = "";
 
@@ -102,7 +109,7 @@ app.post("/api/claude/analyze", async (req, res) => {
       resultText = resJson?.content?.[0]?.text || "Mijn excuses, ik kon geen reactie genereren van Claude.";
     } else {
       // Automatic fallback to Gemini so the app NEVER fails for the end user!
-      console.log(`Claude is mislukt (${lastErrorMsg}). Schakelen naar Gemini Co-pilot...`);
+      console.log(`Claude is mislukt. Schakelen naar Gemini Co-pilot...`);
       try {
         const geminiKey = process.env.GEMINI_API_KEY;
         if (!geminiKey) {
@@ -122,14 +129,14 @@ app.post("/api/claude/analyze", async (req, res) => {
 
         const geminiText = geminiRes.text || "Kon geen reactie genereren via de Gemini Co-pilot.";
         resultText = 
-          `⚠️ **Leta AI Co-pilot status update**: Je Claude API Key of model gaf een foutmelding (*"${lastErrorMsg}"*).\n\n` +
+          `⚠️ **Leta AI Co-pilot status update**: Je Claude API Key of model gaf een foutmelding. De volgende modellen zijn geprobeerd:\n\n${detailedErrors}\n\n` +
           `Om onderbreking te voorkomen, ben ik automatisch overgeschakeld naar het stabiele back-up model: **Gemini 2.5 Flash**.\n\n` +
           `***\n\n` +
           geminiText;
       } catch (geminiErr: any) {
         throw new Error(
-          `Zowel Claude als de Gemini back-up zijn mislukt.\n` +
-          `Laatste Claude Fout: ${lastErrorMsg}\n` +
+          `Zowel alle Claude-modellen als de Gemini back-up zijn mislukt.\n` +
+          `Details Claude model pogingen:\n${detailedErrors}\n` +
           `Gemini Fallback Fout: ${geminiErr.message}`
         );
       }
