@@ -364,8 +364,8 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
           <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-3 tracking-tight">
             Van Dashboard naar Digital Twin
           </h2>
-          <p className="text-slate-405 max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed">
-            De meeste ondernemingen hebben business intelligence. Weinigen hebben een twin. En dat verschil is precies het verschil tussen terugkijken en vooruit sturen.
+          <p className="text-slate-400 max-w-3xl mx-auto text-xs sm:text-sm leading-relaxed">
+            De meeste ondernemingen hebben business intelligence. Weinigen hebben een twin. En dat verschil is precies het verschil tussen terugkijken en vooruit sturen. <strong className="text-blue-400 block mt-2 text-[12px] sm:text-[13px] font-sans">Met Let's-Twin neem je beslissingen op basis van data en niet op onderbuikgevoel — en omdat de werkvloer direct zelf de data begrijpt en kan aansturen, maken dit soort systemen hele managementlagen overbodig.</strong>
           </p>
         </div>
 
@@ -405,31 +405,31 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             </p>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.55">
                 <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Wat-als zonder risico</span>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
-                  Draai aan prijs, personeelsbezetting, een weerscenario of voorraad — en zie omzet, marge, EBITDA en GMROI meteen meebewegen. Je experimenteert met een beslissing vóórdat je 'm in het echt neemt.
+                  Draai aan prijs, personeel, of weerscenario's en zie resultaten meteen overtuigend meebewegen. <strong>Met Let's-Twin neem je beslissingen op basis van data en niet op onderbuikgevoel.</strong>
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.55">
                 <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Beschrijvend + Voorspellend + Advisered</span>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
                   Niet alleen "wat is er gebeurd", maar "wat gebeurt er als…" — en, met de ingebouwde AI-adviseur, "wat zou ik moeten doen?". Alles in één drempelvrije omgeving.
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.55">
                 <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Live data én simulatie</span>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
                   De twin trekt uit kassa, voorraad, bezoekerstellers en het weer, en projecteert vooruit—direct gebaseerd op externe live invloeden.
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.55">
                 <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Visueel & Intuïtief</span>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
-                  Je ziet direct je filialen, je winkelvloer of je machines—geen abstracte stapels grafieken. Iedereen op de werkvloer begrijpt de impact in een oogwenk.
+                  Je ziet direct je filialen, je winkelvloer of je machines—geen abstracte grafische bulten. Iedereen begrijpt de impact direct, waardoor <strong>dit soort systemen hele managementlagen overbodig maken</strong>.
                 </p>
               </div>
             </div>
@@ -440,8 +440,8 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
         <div className="rounded-2xl border border-white/10 bg-black/40 overflow-hidden shadow-2xl">
           <div className="p-5.5 border-b border-white/5 bg-[#090C16]">
             <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest block mb-0.5">De kern in één beeld</span>
-            <p className="text-xs font-sans text-slate-300">
-              BI is de achteruitkijkspiegel. De digital twin is de <strong>vluchtsimulator</strong>. BI vertelt je de temperatuur; de twin laat je behandelingen uitproberen.
+            <p className="text-xs font-sans text-slate-300 leading-relaxed">
+              BI is de achteruitkijkspiegel. De digital twin is de <strong>vluchtsimulator</strong>. BI vertelt je de temperatuur; de twin laat je behandelingen uitproberen. <span className="text-purple-400 block mt-1.5 font-semibold">Met Let's-Twin neem je beslissingen op basis van data en niet op onderbuikgevoel. Dit soort systemen maken hele managementlagen overbodig door strategische data drempelvrij tot op de werkvloer te brengen.</span>
             </p>
           </div>
 
