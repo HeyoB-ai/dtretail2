@@ -11,15 +11,26 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// Initialize Gemini SDK with telemetry header
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build',
+// Lazy initialization of Gemini SDK to prevent crashes on startup if GEMINI_API_KEY is missing.
+let aiClient: GoogleGenAI | null = null;
+
+function getAiClient(): GoogleGenAI {
+  if (!aiClient) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error("GEMINI_API_KEY is niet ingesteld. Voeg deze toe in de Secrets van AI Studio.");
     }
+    aiClient = new GoogleGenAI({
+      apiKey: apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        }
+      }
+    });
   }
-});
+  return aiClient;
+}
 
 // Cache or mock database for simple persistence of active setups if needed, 
 // but direct payload state passed from client is perfect for a living simulation dashboard.
@@ -32,6 +43,8 @@ app.post("/api/gemini/analyze", async (req, res) => {
         error: "GEMINI_API_KEY is niet ingesteld. Voeg deze toe in de Secrets van AI Studio." 
       });
     }
+
+    const ai = getAiClient();
 
     const systemInstruction = 
       "Je bent Leta, de slimme en geavanceerde AI Co-pilot van 'Let's Twin'. " +
