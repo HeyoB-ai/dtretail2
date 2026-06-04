@@ -116,10 +116,68 @@ app.post("/api/claude/analyze", async (req, res) => {
   }
 });
 
+function formatMarkdownToHtml(text: string): string {
+  if (!text) return "";
+  
+  // Escape general HTML angles first to keep it safe from tags, except we build our own
+  let safe = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+    
+  // Convert markdown headers
+  // # Header -> h2
+  safe = safe.replace(/^# (.*?)$/gm, '<h2 style="color: #38bdf8; font-size: 18px; font-weight: 800; margin-top: 24px; margin-bottom: 12px; border-bottom: 1px solid #334155; padding-bottom: 6px; text-transform: uppercase; font-family: sans-serif; letter-spacing: 0.5px;">$1</h2>');
+  // ## Subheader -> h3
+  safe = safe.replace(/^## (.*?)$/gm, '<h3 style="color: #ffffff; font-size: 14px; font-weight: 700; margin-top: 18px; margin-bottom: 8px; border-left: 3px solid #3b82f6; padding-left: 10px; font-family: sans-serif;">$1</h3>');
+  // ### Small Header -> h4
+  safe = safe.replace(/^### (.*?)$/gm, '<h4 style="color: #22d3ee; font-size: 12px; font-weight: 700; margin-top: 14px; margin-bottom: 6px; font-family: monospace; text-transform: uppercase;">$1</h4>');
+  
+  // Bold tags **text** -> strong
+  safe = safe.replace(/\*\*(.*?)\*\//g, '<strong style="color: #38bdf8; font-weight: 800;">$1</strong>');
+  
+  // Clean separators --- -> hr
+  safe = safe.replace(/^---$/gm, '<hr style="border: 0; border-top: 1px solid #1e293b; margin: 16px 0;" />');
+  
+  // List items starting with "- " or "* "
+  safe = safe.replace(/^[-\*] (.*?)$/gm, '<li style="margin-left: 15px; margin-bottom: 6px; color: #cbd5e1; font-family: sans-serif; font-size: 13px;">$1</li>');
+
+  const lines = safe.split("\n");
+  let inList = false;
+  const processed: string[] = [];
+  
+  for (let line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith("<li")) {
+      if (!inList) {
+        processed.push('<ul style="margin: 10px 0; padding: 0 0 0 10px; list-style-type: none;">');
+        inList = true;
+      }
+      processed.push(line);
+    } else {
+      if (inList) {
+        processed.push('</ul>');
+        inList = false;
+      }
+      // If it's not empty and not an existing HTML tag line
+      if (trimmed && !trimmed.startsWith("<h") && !trimmed.startsWith("<hr") && !trimmed.startsWith("<ul") && !trimmed.startsWith("</ul") && !trimmed.startsWith("<div") && !trimmed.startsWith("</div") && !trimmed.startsWith("<table") && !trimmed.startsWith("<tr") && !trimmed.startsWith("<td")) {
+        processed.push('<p style="margin: 0 0 10px 0; color: #cbd5e1; font-size: 13px; font-family: sans-serif; line-height: 1.65;">' + line + '</p>');
+      } else {
+        processed.push(line);
+      }
+    }
+  }
+  if (inList) {
+    processed.push('</ul>');
+  }
+  
+  return processed.join("\n");
+}
+
 // Endpoint for sending generated proposals as e-mails via SMTP or Ethereal/logged simulation
 app.post("/api/send-email", async (req, res) => {
   try {
-    const { contactEmail, companyName, proposalSector, challengeText, proposalResult } = req.body;
+    const { contactEmail, companyName, proposalSector, challengeText, proposalResult, websiteUrl } = req.body;
 
     if (!contactEmail) {
       return res.status(400).json({ error: "E-mailadres is verplicht." });
@@ -136,7 +194,9 @@ app.post("/api/send-email", async (req, res) => {
       to: contactEmail,
       subject: `📋 Jouw Digital Twin Pilot Voorstel: ${companyName}`,
       text: `Beste ${companyName} team,\n\nHier is het op maat gemaakte Digital Twin Pilot projectvoorstel dat door onze AI Co-pilot Leta is voorbereid.\n\n` + 
-            `Bedrijfsnaam: ${companyName}\nSector: ${proposalSector}\n\nUitdaging:\n${challengeText || "Niet gespecificeerd"}\n\n` +
+            `Bedrijfsnaam: ${companyName}\n` +
+            (websiteUrl ? `Website: ${websiteUrl}\n` : "") +
+            `Sector: ${proposalSector}\n\nUitdaging:\n${challengeText || "Niet gespecificeerd"}\n\n` +
             `--- DOCUMENT ---\n\n${proposalResult}\n\n---\n\nMet vriendelijke groet,\nLet's-Twin Team`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333; line-height: 1.6;">
@@ -146,9 +206,15 @@ app.post("/api/send-email", async (req, res) => {
           
           <table style="width: 100%; border-collapse: collapse; margin: 20px 0; background: #f8fafc;">
             <tr>
-              <td style="padding: 10px; border: 1px solid #e2e8f0; font-weight: bold;">Bedrijf:</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0; font-weight: bold; width: 30%;">Bedrijf:</td>
               <td style="padding: 10px; border: 1px solid #e2e8f0;">${companyName}</td>
             </tr>
+            ${websiteUrl ? `
+            <tr>
+              <td style="padding: 10px; border: 1px solid #e2e8f0; font-weight: bold;">Website URL:</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;"><a href="${websiteUrl.startsWith('http') ? websiteUrl : 'https://' + websiteUrl}" target="_blank" style="color: #2563eb;">${websiteUrl}</a></td>
+            </tr>
+            ` : ""}
             <tr>
               <td style="padding: 10px; border: 1px solid #e2e8f0; font-weight: bold;">Sector / Branche:</td>
               <td style="padding: 10px; border: 1px solid #e2e8f0;">${proposalSector}</td>
@@ -159,8 +225,8 @@ app.post("/api/send-email", async (req, res) => {
             </tr>
           </table>
 
-          <div style="background: #1e293b; color: #f1f5f9; padding: 20px; border-radius: 8px; font-size: 14px; white-space: pre-wrap; margin-top: 20px;">
-            ${proposalResult.replace(/\n/g, '<br />')}
+          <div style="background: #0f172a; color: #f1f5f9; padding: 25px; border-radius: 12px; font-size: 14px; margin-top: 20px; border: 1px solid #1e293b;">
+            ${formatMarkdownToHtml(proposalResult)}
           </div>
 
           <p style="margin-top: 30px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 10px;">

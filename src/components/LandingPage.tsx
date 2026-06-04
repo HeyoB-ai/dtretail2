@@ -24,6 +24,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
   // AI Pilot Proposal States
   const [companyName, setCompanyName] = useState<string>("");
   const [proposalSector, setProposalSector] = useState<string>("Maakindustrie & Machinebouw");
+  const [websiteUrl, setWebsiteUrl] = useState<string>("");
   const [contactEmail, setContactEmail] = useState<string>("");
   const [challengeText, setChallengeText] = useState<string>("");
   const [proposalResult, setProposalResult] = useState<string | null>(null);
@@ -54,7 +55,8 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
           companyName,
           proposalSector,
           challengeText: challengeText || "Algemene digitalisering en optimalisatie.",
-          proposalResult: proposalText
+          proposalResult: proposalText,
+          websiteUrl
         })
       });
 
@@ -197,15 +199,21 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
           companyName,
           proposalSector,
           contactEmail,
+          websiteUrl: websiteUrl || "Niet gespecificeerd",
           challengeText: challengeText || "Algemene digitalisering en optimalisatie."
         },
         message: `Genereer een uiterst professioneel en overtuigend B2B Digital Twin & Dashboard Pilot Project Voorstel voor het bedrijf '${companyName}' actief in de sector '${proposalSector}'. ` +
+                 (websiteUrl ? `Hun website URL is: '${websiteUrl}'. ` : "") +
                  `Hun belangrijkste uitdaging is: '${challengeText || "Ze willen live inzicht en predictive alerts op hun operationele data."}'. ` +
+                 `RELEVANTE INFORMATIE-DETECIE: Analyseer de bedrijfsnaam '${companyName}', de sector, de website URL '${websiteUrl}' en de specifieke uitdaging. ` +
+                 `Als een van deze gegevens (zoals de naam, de URL of de uitdaging) doet vermoeden dat het om een FIETSKOERIER (fietser-logistiek, koeriersdienst, e-bike levering, greenspeed, koeriers, bicycle courier) gaat, ` +
+                 `MOET je het voorstel VOLLEDIG toespitsen op een geavanceerd realtime digital twin dashboard voor fietskoerier- en e-bike vlootbeheer! ` +
+                 `Focus in dat geval op: realtime GPS fietser-tracking, batterij-monitoring van e-bikes, order dispatch integraties, koerier workloads en efficiëntie, live ETA-voorspellingen en scenario's zoals 'Slecht weer piekdrukte' of 'Piek-volume aanvraag met 20 extra apotheek-leveringen'. ` +
                  `Structuur het rapport heel duidelijk met de volgende Nederlandse koppen om een professionele indruk achter te laten:\n` +
-                 `- **1. EXECUTIVE SAMENVATTING**: Waarom een digital twin cruciaal is voor ${companyName} om hun uitdaging aan te pakken.\n` +
-                 `- **2. ARCHITECTUUR & SENSOR-DATA** (Modbus/LoRaWAN/API koppelingen gebaseerd op hun sector).\n` +
-                 `- **3. HET LIVE INTERACTIEVE DASHBOARD**: Beschrijf welke KPI's we live gaan visualiseren en de voordelen van een 'Wat-Als' scenario-simulator.\n` +
-                 `- **4. PREDICTIEF ADVIES DOOR CO-PILOT LETA**: Hoe onze AI-module hen helpt storingen te vermijden.\n` +
+                 `- **1. EXECUTIVE SAMENVATTING**: Waarom een digital twin cruciaal is voor ${companyName} om hun logistieke of operationele uitdaging aan te pakken.\n` +
+                 `- **2. ARCHITECTUUR & SENSOR-DATA** (Modbus/LoRaWAN/API of GPS-tracker koppelingen gebaseerd op hun sector/e-bike vloot).\n` +
+                 `- **3. HET LIVE INTERACTIEVE DASHBOARD**: Beschrijf welke KPI's we live gaan visualiseren (bijv. actieve fietsers, live zendingen, batterijstroom) en de voordelen van een 'Wat-Als' scenario-simulator.\n` +
+                 `- **4. PREDICTIEF ADVIES DOOR CO-PILOT LETA**: Hoe onze AI-module hen helpt vlootstoringen te vermijden of bezettingsgraad te voorspellen.\n` +
                  `- **5. PILOT PROJECT PLANNING & KOSTEN**: Een strakke 4-weken roadmap met een geschatte ROI.\n` +
                  `Gebruik een bemoedigende, overtuigende, deskundige toon en vermijd vage placeholders. Schrijf direct alsof je hun expert-consultant bent.`
       });
@@ -773,6 +781,20 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                   <option value="Smart Energy & Zonneparken">Smart Energy & Zonneparken</option>
                   <option value="Logistiek, Transport & Warehousing">Logistiek, Transport & Warehousing</option>
                 </select>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className="block text-[10px] font-mono text-slate-400 uppercase mb-1.5 font-bold">Website URL</label>
+                  <span className="text-[9px] text-slate-500 italic font-mono">Optioneel</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Bijv. www.greenspeedkoeriers.nl"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                  className="w-full bg-[#07090F]/80 border border-white/10 rounded-xl py-3 px-4 text-xs md:text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all font-sans"
+                />
               </div>
 
               <div>
