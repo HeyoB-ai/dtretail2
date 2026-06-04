@@ -46,18 +46,15 @@ export async function handler(event, context) {
 
     // Request Anthropic Claude Messages API with adaptive model fallbacks
     const candidateModels = [
-      "claude-4.5-haiku",
-      "claude-4-5-haiku",
-      "claude-3-5-haiku-20241022",
-      "claude-3-5-haiku-latest",
-      "claude-3-5-sonnet-latest",
-      "claude-3-5-sonnet-20241022",
-      "claude-3-5-sonnet-20240620"
+      "claude-haiku-4-5",
+      "claude-3-5-haiku-20241022"
     ];
 
     let response = null;
-    const modelErrors = {};
     let usedModel = "";
+    let anthropicErrorStatus = null;
+    let anthropicErrorMessage = "";
+    let anthropicErrorBody = null;
 
     if (hasClaudeKey) {
       for (const model of candidateModels) {
@@ -89,90 +86,42 @@ export async function handler(event, context) {
             usedModel = model;
             break;
           } else {
-            const errJson = await tempResponse.json().catch(() => ({}));
-            const errMsg = errJson?.error?.message || `Status: ${tempResponse.status}`;
-            modelErrors[model] = errMsg;
-            console.warn(`Model ${model} mislukt op Netlify: ${errMsg}`);
+            anthropicErrorStatus = tempResponse.status;
+            const errJson = await tempResponse.json().catch(() => null);
+            anthropicErrorBody = errJson;
+            anthropicErrorMessage = errJson?.error?.message || `Status Code: ${tempResponse.status}`;
+            console.warn(`Model ${model} mislukt op Netlify met status ${tempResponse.status}: ${anthropicErrorMessage}`);
           }
         } catch (err) {
-          const errMsg = err.message || "Onbekende fout";
-          modelErrors[model] = errMsg;
-          console.warn(`Fout tijdens verbinding met model ${model} op Netlify: ${errMsg}`);
+          anthropicErrorStatus = anthropicErrorStatus || 500;
+          anthropicErrorMessage = err.message || "Onbekende netwerk/verbindingsfout";
+          console.warn(`Fout tijdens verbinding met model ${model} op Netlify: ${anthropicErrorMessage}`);
         }
       }
     } else {
-      modelErrors["claude-config"] = "Geen geldige Claude API-sleutel ingesteld op Netlify.";
+      anthropicErrorStatus = 401;
+      anthropicErrorMessage = "Geen geldige Claude API-sleutel ingesteld op Netlify.";
     }
 
-    const detailedErrors = Object.entries(modelErrors)
-      .map(([m, err]) => `• **${m}**: ${err}`)
-      .join("\n");
-
-    let resultText = "";
-
-    if (response) {
-      const resJson = await response.json();
-      resultText = resJson?.content?.[0]?.text || "Mijn excuses, ik kon geen reactie genereren van Claude.";
-    } else {
-      // Automatic fallback to zero-dependency Gemini REST API inside Netlify func
-      console.log(`Claude is mislukt op Netlify. Schakelen naar Gemini...`);
-      const geminiKey = process.env.GEMINI_API_KEY;
-      if (!geminiKey) {
-        return {
-          statusCode: 400,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: JSON.stringify({
-            error: `De Claude API verbinding is mislukt. De volgende modellen zijn geprobeerd:\n\n${detailedErrors}\n\nEr is geen back-up GEMINI_API_KEY geconfigureerd in de Netlify Site Settings om dit automatisch op te vangen.`
-          }),
-        };
-      }
-
-      try {
-        const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: userPrompt }] }],
-            systemInstruction: { parts: [{ text: systemInstruction }] },
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 1500
-            }
-          })
-        });
-
-        if (!geminiResponse.ok) {
-          const geminiErrJson = await geminiResponse.json().catch(() => ({}));
-          throw new Error(geminiErrJson?.error?.message || `Gemini API Status: ${geminiResponse.status}`);
-        }
-
-        const geminiResJson = await geminiResponse.json();
-        const geminiText = geminiResJson.candidates?.[0]?.content?.parts?.[0]?.text || "Kon geen reactie genereren van de Gemini Co-pilot.";
-
-        resultText = 
-          `⚠️ **Leta AI Co-pilot status update**: Je Claude API Key of model gaf een foutmelding. De volgende modellen zijn geprobeerd:\n\n${detailedErrors}\n\n` +
-          `Om onderbreking te voorkomen, ben ik automatisch overgeschakeld naar het stabiele back-up model: **Gemini 2.5 Flash**.\n\n` +
-          `***\n\n` +
-          geminiText;
-
-      } catch (geminiErr) {
-        return {
-          statusCode: 500,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: JSON.stringify({
-            error: `Zowel alle Claude-modellen als de Gemini-backup zijn mislukt op Netlify.\n\nDetails Claude model pogingen:\n${detailedErrors}\n\nGemini back-up foutmelding: ${geminiErr.message || geminiErr}`
-          }),
-        };
-      }
+    if (!response) {
+      console.error(`Alle Anthropic AI-modellen zijn mislukt op Netlify. Status: ${anthropicErrorStatus}. Foutmelding: ${anthropicErrorMessage}`);
+      return {
+        statusCode: anthropicErrorStatus || 500,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          error: anthropicErrorMessage || "Alle AI-modellen zijn mislukt.",
+          status: anthropicErrorStatus,
+          raw: anthropicErrorBody,
+          candidateModels
+        }),
+      };
     }
+
+    const resJson = await response.json();
+    const resultText = resJson?.content?.[0]?.text || "Mijn excuses, ik kon geen reactie genereren van Claude.";
 
     return {
       statusCode: 200,
