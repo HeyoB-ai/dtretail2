@@ -871,8 +871,8 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                 </div>
 
                 {/* Main Scrollable Report */}
-                <div className="flex-grow overflow-y-auto max-h-[380px] p-4 bg-black/40 rounded-xl border border-white/5 text-xs text-slate-300 leading-relaxed font-sans mr-1 printable-document-body">
-                  {parseProposal(proposalResult)}
+                <div className="flex-grow overflow-y-auto max-h-[380px] p-4 bg-black/40 rounded-xl border border-white/5 text-xs text-slate-300 leading-relaxed font-sans whitespace-pre-line mr-1 printable-document-body">
+                  {proposalResult}
                 </div>
 
                 {/* Email Delivery Feedback Container */}
@@ -1047,106 +1047,5 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       </footer>
     </div>
   );
-}
-
-// Custom Markdown parser to make AI proposal look gorgeous instead of plain text with markdown tags
-function parseProposal(text: string | null) {
-  if (!text) return null;
-  
-  const lines = text.split("\n");
-  const parsedElements: React.ReactNode[] = [];
-  
-  let listItems: React.ReactNode[] = [];
-
-  const flushList = (key: string | number) => {
-    if (listItems.length > 0) {
-      parsedElements.push(
-        <ul key={`list-${key}`} className="space-y-2.5 my-3 pl-5 list-disc list-outside text-slate-300 leading-relaxed font-sans">
-          {...listItems}
-        </ul>
-      );
-      listItems = [];
-    }
-  };
-
-  const processBoldText = (txt: string) => {
-    const parts = txt.split("**");
-    return parts.map((part, i) => {
-      if (i % 2 === 1) {
-        return <strong key={part + i} className="text-cyan-400 font-extrabold">{part}</strong>;
-      }
-      return part;
-    });
-  };
-
-  lines.forEach((line, index) => {
-    const trimmedLine = line.trim();
-
-    if (trimmedLine === "---" || trimmedLine === "___" || trimmedLine === "***") {
-      flushList(index);
-      parsedElements.push(
-        <hr key={index} className="border-white/10 my-4" />
-      );
-      return;
-    }
-
-    if (trimmedLine.startsWith("# ")) {
-      flushList(index);
-      const headerText = trimmedLine.substring(2);
-      parsedElements.push(
-        <h2 key={index} className="text-lg sm:text-xl font-bold font-display text-white mt-6 mb-3 border-b border-white/10 pb-1.5 tracking-tight uppercase">
-          {processBoldText(headerText)}
-        </h2>
-      );
-      return;
-    }
-
-    if (trimmedLine.startsWith("## ")) {
-      flushList(index);
-      const headerText = trimmedLine.substring(3);
-      parsedElements.push(
-        <h3 key={index} className="text-sm sm:text-base font-bold font-display text-white mt-4 mb-2 border-l-2 border-blue-500 pl-3">
-          {processBoldText(headerText)}
-        </h3>
-      );
-      return;
-    }
-
-    if (trimmedLine.startsWith("### ")) {
-      flushList(index);
-      const headerText = trimmedLine.substring(4);
-      parsedElements.push(
-        <h4 key={index} className="text-xs sm:text-sm font-mono font-bold text-cyan-400 mt-3 mb-1 uppercase tracking-wide">
-          {processBoldText(headerText)}
-        </h4>
-      );
-      return;
-    }
-
-    if (trimmedLine.startsWith("- ") || trimmedLine.startsWith("* ")) {
-      const bulletText = trimmedLine.substring(2);
-      listItems.push(
-        <li key={index} className="text-xs sm:text-sm text-slate-300 leading-relaxed py-0.5">
-          {processBoldText(bulletText)}
-        </li>
-      );
-      return;
-    }
-
-    if (trimmedLine === "") {
-      flushList(index);
-      parsedElements.push(<div key={index} className="h-2" />);
-    } else {
-      flushList(index);
-      parsedElements.push(
-        <p key={index} className="text-xs sm:text-sm text-slate-350 leading-relaxed font-sans mb-3">
-          {processBoldText(line)}
-        </p>
-      );
-    }
-  });
-
-  flushList("final");
-  return parsedElements;
 }
 
