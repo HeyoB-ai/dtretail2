@@ -252,7 +252,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
         </h1>
 
         <p className="max-w-3xl text-slate-400 text-sm sm:text-base mb-10 leading-relaxed font-sans">
-          Beheert u een fabriek, een gemeentelijk energienetwerk of een logistieke keten? Wij bouwen interactieve, op maat gemaakte <strong>Digital Twins</strong> en dashboards. Krijg direct grip op wat er <strong>NU</strong> gebeurt, simuleer complexe <strong>"Wat-Als"-scenario's</strong> en reduceer faalkosten met onze intelligente <strong>Leta AI Co-pilot</strong>.
+          Beheert u een productiebedrijf, een gemeentelijk energienetwerk of een logistieke keten? Wij bouwen interactieve, op maat gemaakte <strong>Digital Twins</strong> en dashboards. Krijg direct grip op wat er <strong>NU</strong> gebeurt, simuleer complexe <strong>"Wat-Als"-scenario's</strong> en reduceer faalkosten met onze intelligente <strong>Leta AI Co-pilot</strong>.
         </p>
 
         {/* Dynamic CTA buttons row */}
@@ -616,7 +616,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                         : 'bg-black/35 border-white/5 text-slate-450 hover:bg-white/5'
                     }`}
                   >
-                    🏗️ Industrie / Fabriek
+                    🏗️ Industrie / Productiebedrijf
                   </button>
                   <button
                     onClick={() => setSelectedSector('smartcity')}
@@ -978,7 +978,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       <section className="px-4 py-16 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full z-10 border-t border-white/5 bg-[#07090F]">
         <div className="text-center mb-12">
           <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">KLANTSUCCESSEN</span>
-          <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-2 tracking-tight">Vraag Het Onze Partners</h2>
+          <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-2 tracking-tight">Wat zeggen onze klanten</h2>
           <p className="text-slate-400 max-w-xl mx-auto text-xs sm:text-sm">
             Echte betrouwbaarheid, bewezen door lagere faalkosten en slimme datapunten.
           </p>
@@ -992,7 +992,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             <div className="mt-4 pt-3 border-t border-white/5 flex items-center space-x-3">
               <span className="h-8 w-8 rounded-full bg-blue-600/20 text-blue-400 font-bold font-display uppercase flex items-center justify-center">QB</span>
               <div>
-                <span className="block font-bold text-white text-[11px]">Dhr. Van den Berg</span>
+                <span className="block font-bold text-white text-[11px]">Sanne</span>
                 <span className="block text-[9px] text-slate-500 font-mono uppercase">Hoofd Operations • QBTEC</span>
               </div>
             </div>
@@ -1005,7 +1005,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             <div className="mt-4 pt-3 border-t border-white/5 flex items-center space-x-3">
               <span className="h-8 w-8 rounded-full bg-cyan-600/20 text-cyan-400 font-bold font-display uppercase flex items-center justify-center">GW</span>
               <div>
-                <span className="block font-bold text-white text-[11px]">Mevr. De Vries</span>
+                <span className="block font-bold text-white text-[11px]">Mark</span>
                 <span className="block text-[9px] text-slate-500 font-mono uppercase">Smart City Lead • Gemeente Woerden</span>
               </div>
             </div>
@@ -1018,7 +1018,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             <div className="mt-4 pt-3 border-t border-white/5 flex items-center space-x-3">
               <span className="h-8 w-8 rounded-full bg-purple-600/20 text-purple-400 font-bold font-display uppercase flex items-center justify-center">ST</span>
               <div>
-                <span className="block font-bold text-white text-[11px]">Mevr. Van Zuylen</span>
+                <span className="block font-bold text-white text-[11px]">Bram</span>
                 <span className="block text-[9px] text-slate-500 font-mono uppercase">Directeur Logistiek & Retail • Sole Twin Shoes</span>
               </div>
             </div>
@@ -1030,7 +1030,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       <footer className="mt-auto shrink-0 bg-[#07090F] border-t border-white/5 flex flex-col md:flex-row items-center justify-between px-12 py-8 z-10 text-slate-500 text-[10px] font-mono gap-4">
         <div className="flex flex-col md:items-start text-center md:text-left">
           <span className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em] mb-1">Let's-Twin Agency B.V.</span>
-          <span className="text-xs font-semibold text-slate-300">Overheid • Fabriek • Retail</span>
+          <span className="text-xs font-semibold text-slate-300">Overheid • Productiebedrijf • Retail</span>
         </div>
         <div className="flex flex-col md:items-start text-center md:text-left">
           <span className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em] mb-1">AI Co-pilot Generative Engine</span>
