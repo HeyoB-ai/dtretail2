@@ -96,7 +96,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       name: "Smart Food Systems Maakbedrijf",
       company: "QBTEC Let's-Twin",
       iframeUrl: "https://dtqbtec.netlify.app",
-      description: "Een operationele digital twin voor QBTEC (hoogwaardige professionele frituursystemen). Beheer de binnengekomen orders, de metaalbewerkingsrobots en lasersnijders in realtime.",
+      description: "Een operationele digital twin voor QBTEC (hoogwaardige professionele frituursystemen). Beheer binnenkomende orders, metaalbewerkingsrobots en lasersnijders in realtime.",
       keyStats: [
         { label: "NU actieve orders", value: "24 stuks" },
         { label: "Optimalisatie", value: "+14.2% output" },
@@ -110,7 +110,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       name: "Gemeenschappelijke Woerden Grid",
       company: "Gemeente Woerden Let's-Twin",
       iframeUrl: "https://dtwoerden.netlify.app",
-      description: "Visualisatie van stedelijke telemetry voor Woerden. Beheer hittestress, waterhuishouding bij zware regenval, verkeersdrukte en gemeentelijke infrastructuur.",
+      description: "Visualiseer stedelijke telemetry voor Woerden: beheer hittestress, waterhuishouding bij zware regenval, verkeersdrukte en gemeentelijke infrastructuur.",
       keyStats: [
         { label: "NU actieve sensoren", value: "1,240 nodes" },
         { label: "Optimalisatie", value: "-22% wateroverlast" },
@@ -124,7 +124,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       name: "Sole Twin Schoenmode (5 Filialen)",
       company: "Sole Twin Let's-Twin",
       iframeUrl: "https://dt-retail.netlify.app",
-      description: "Digital twin van een actieve luxe schoenenketen met 5 fysieke winkels. Beheer consumentenstromen, kassa-wachtrijen, actuele schapbezetting en optimaliseer de voorraadoverdracht in realtime.",
+      description: "Digital twin van een luxe schoenenketen met 5 fysieke winkels. Beheer bezoekersstromen, kassa-wachtrijen en schapbezetting, en optimaliseer de voorraadoverdracht in realtime.",
       keyStats: [
         { label: "Nu winkelend (totaal)", value: "84 personen" },
         { label: "Optimalisatie omloopsnelheid", value: "+21% sneller" },
@@ -141,17 +141,17 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
     {
       icon: <Radio className="h-6 w-6 text-blue-400" />,
       title: "1. NU: Live Stand van Zaken",
-      description: "U weet op elk gewenst moment exact hoe het met uw bedrijf, gemeente of winkel gaat. Sensoring telemetry streamt zonder vertraging direct naar uw dashboards."
+      description: "U weet op elk moment exact hoe het met uw bedrijf, gemeente of winkel gaat. Sensortelemetry streamt zonder vertraging naar uw operationele dashboards."
     },
     {
       icon: <LineChart className="h-6 w-6 text-cyan-400" />,
       title: "2. SCENARIO'S: De Wat-Als Wereld",
-      description: "U simuleert complexe scenario's voordat ze plaatsvinden. Wat gebeurt er met de afwatering in Woerden bij 40mm regen? Wat bij machine-uitval bij QBTEC?"
+      description: "U simuleert complexe scenario's vóór ze zich voordoen. Wat gebeurt er met de afwatering in Woerden bij 40 mm regen? En bij machine-uitval bij QBTEC?"
     },
     {
       icon: <Cpu className="h-6 w-6 text-purple-400" />,
       title: "3. AI: Intelligente Besluitvorming",
-      description: "Onze geïntegreerde AI Co-pilot analyseert patronen in realtime. Het geeft proactieve adviezen, voorspelt onderhoud en helpt u operationele risico's direct te minimaliseren."
+      description: "Onze geïntegreerde AI Co-pilot analyseert patronen in realtime. Die geeft proactief advies, voorspelt onderhoud en helpt u operationele risico's direct te minimaliseren."
     }
   ];
 
@@ -252,7 +252,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
         </h1>
 
         <p className="max-w-3xl text-slate-400 text-sm sm:text-base mb-10 leading-relaxed font-sans">
-          Beheert u een fabriek, een gemeentelijk energienetwerk of een logistieke keten? Wij bouwen op maat gemaakte, interactieve <strong>Digital Twins</strong> en dashboards. Krijg direct grip op wat er <strong>NU</strong> gebeurt, simuleer complexe <strong>"Wat-Als" scenario's</strong>, en reduceer faalkosten met onze intelligente <strong>Leta AI Co-pilot</strong>.
+          Beheert u een fabriek, een gemeentelijk energienetwerk of een logistieke keten? Wij bouwen interactieve, op maat gemaakte <strong>Digital Twins</strong> en dashboards. Krijg direct grip op wat er <strong>NU</strong> gebeurt, simuleer complexe <strong>"Wat-Als"-scenario's</strong> en reduceer faalkosten met onze intelligente <strong>Leta AI Co-pilot</strong>.
         </p>
 
         {/* Dynamic CTA buttons row */}
@@ -296,10 +296,10 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
         <div className="text-center mb-10">
           <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">INTERACTIEVE PORTFOLIO</span>
           <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-3 tracking-tight">
-            ONZE WERKEND OPGELEVERDE DIGITAL TWINS
+            ONZE WERKENDE, OPGELEVERDE DIGITAL TWINS
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed">
-            Klik op een van onze drie referentieprojecten om direct de live, operationele web-replica's te testen die we aanbieden en hun real-time telemetry te inspecteren.
+            Klik op een van onze drie referentieprojecten om de live web-replica's direct te testen en hun realtime telemetry te inspecteren.
           </p>
         </div>
 
@@ -379,7 +379,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
               {/* Status metrics widget */}
               <div className="space-y-2.5 pt-4 border-t border-white/5">
                 <span className="block text-[10px] font-mono tracking-widest text-slate-500 uppercase">
-                  Operationele KPI's & Real-time Alerts
+                  Operationele KPI's & realtime alerts
                 </span>
                 <div className="grid grid-cols-1 gap-1.5">
                   {currentPreview.keyStats.map((stat, idx) => (
@@ -406,7 +406,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                 className="cursor-pointer w-full py-3 px-4 bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 text-[10px] font-bold rounded-xl uppercase tracking-wider flex items-center justify-center space-x-2 transition-all animate-pulse"
               >
                 <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
-                <span>Stel AI Analyse-vraag over deze twin</span>
+                <span>Stel een AI-analysevraag over deze twin</span>
               </button>
             </div>
           </div>
@@ -421,7 +421,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             Van Dashboard naar Digital Twin
           </h2>
           <p className="text-slate-400 max-w-3xl mx-auto text-xs sm:text-sm leading-relaxed">
-            De meeste ondernemingen hebben business intelligence. Weinigen hebben een twin. En dat verschil is precies het verschil tussen terugkijken en vooruit sturen. <strong className="text-blue-400 block mt-2 text-[12px] sm:text-[13px] font-sans">Met Let's-Twin neem je beslissingen op basis van data en niet op onderbuikgevoel — en omdat de werkvloer direct zelf de data begrijpt en kan aansturen, maken dit soort systemen hele managementlagen overbodig.</strong>
+            De meeste ondernemingen hebben business intelligence. Weinigen hebben een twin. En dat is precies het verschil tussen terugkijken en vooruit sturen. <strong className="text-blue-400 block mt-2 text-[12px] sm:text-[13px] font-sans">Met Let's-Twin neem je beslissingen op basis van data en niet op onderbuikgevoel — en omdat de werkvloer de data direct zelf begrijpt en kan aansturen, maken dit soort systemen hele managementlagen overbodig.</strong>
           </p>
         </div>
 
@@ -436,7 +436,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             </div>
             
             <p className="text-slate-400 text-xs leading-relaxed font-sans">
-              Laten we eerlijk zijn: tools als Qlik en Power BI zijn uitstekend. Ze brengen data uit al je systemen samen, bouwen overzichtelijke dashboards en KPI's, en laten je tot op detailniveau inzoomen op wat er is gebeurd. Voor rapportage en monitoring zijn ze onmisbaar.
+              Laten we eerlijk zijn: tools als Qlik en Power BI zijn uitstekend. Ze brengen data uit al je systemen samen, bouwen overzichtelijke dashboards en KPI's en laten je tot op detailniveau inzoomen op wat er is gebeurd. Voor rapportage en monitoring zijn ze onmisbaar.
             </p>
 
             <div className="pt-4 border-t border-white/5 space-y-3">
@@ -464,12 +464,12 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
               <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.55">
                 <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Wat-als zonder risico</span>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
-                  Draai aan prijs, personeel, of weerscenario's en zie resultaten meteen overtuigend meebewegen. <strong>Met Let's-Twin neem je beslissingen op basis van data en niet op onderbuikgevoel.</strong>
+                  Draai aan prijs, personeel of weerscenario's en zie de resultaten meteen meebewegen. <strong>Met Let's-Twin neem je beslissingen op basis van data en niet op onderbuikgevoel.</strong>
                 </p>
               </div>
 
               <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.55">
-                <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Beschrijvend + Voorspellend + Advisered</span>
+                <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Beschrijvend + Voorspellend + Adviserend</span>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
                   Niet alleen "wat is er gebeurd", maar "wat gebeurt er als…" — en, met de ingebouwde AI-adviseur, "wat zou ik moeten doen?". Alles in één drempelvrije omgeving.
                 </p>
@@ -478,14 +478,14 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
               <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.55">
                 <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Live data én simulatie</span>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
-                  De twin trekt uit kassa, voorraad, bezoekerstellers en het weer, en projecteert vooruit—direct gebaseerd op externe live invloeden.
+                  De twin combineert data uit kassa, voorraad, bezoekerstellers en weer, en projecteert die vooruit — direct op basis van live externe invloeden.
                 </p>
               </div>
 
               <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1.55">
                 <span className="block text-[10px] font-mono text-cyan-400 font-bold uppercase">Visueel & Intuïtief</span>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
-                  Je ziet direct je filialen, je winkelvloer of je machines—geen abstracte grafische bulten. Iedereen begrijpt de impact direct, waardoor <strong>dit soort systemen hele managementlagen overbodig maken</strong>.
+                  Je ziet direct je filialen, je winkelvloer of je machines — geen abstracte grafieken. Iedereen begrijpt de impact meteen, waardoor <strong>dit soort systemen hele managementlagen overbodig maken</strong>.
                 </p>
               </div>
             </div>
@@ -519,7 +519,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                 <tr className="hover:bg-white/5 transition-colors">
                   <td className="p-4.5 font-bold text-white">Aard</td>
                   <td className="p-4.5 border-l border-white/5 text-slate-400">Rapportage en dashboards</td>
-                  <td className="p-4.5 border-l border-white/5 font-semibold text-white">Levend, interactief vloeibaar model</td>
+                  <td className="p-4.5 border-l border-white/5 font-semibold text-white">Levend, interactief model</td>
                 </tr>
                 <tr className="hover:bg-white/5 transition-colors">
                   <td className="p-4.5 font-bold text-white">Tijdshorizon</td>
@@ -552,7 +552,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
           <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest block mb-1">STRATEGISCHE AANPAK</span>
           <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-2 tracking-tight">Onze 4-Stappen Methodologie</h2>
           <p className="text-slate-400 max-w-xl mx-auto text-xs sm:text-sm">
-            Van legacy-installaties naar een levende en intelligente overzichtsplaat. Dit is hoe wij te werk gaan:
+            Van legacy-installaties naar een levend, intelligent overzicht. Zo gaan wij te werk:
           </p>
         </div>
 
@@ -561,28 +561,28 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             <span className="text-2xl font-black text-blue-500 font-display">01</span>
             <h4 className="font-bold text-white text-sm uppercase tracking-wider">Sensor & API Koppeling</h4>
             <p className="text-slate-400 leading-relaxed text-[11px]">
-              We koppelen uw fysieke installaties aan onze SCADA gateways via standaard industrie-protocollen zoals OPC-UA, Modbus/TCP, MQTT en moderne REST APIs.
+              We koppelen uw fysieke installaties aan onze SCADA-gateways via standaard industriële protocollen zoals OPC-UA, Modbus/TCP, MQTT en moderne REST-API's.
             </p>
           </div>
           <div className="p-5.5 rounded-2xl border border-white/5 bg-white/5 space-y-3">
             <span className="text-2xl font-black text-cyan-400 font-display">02</span>
             <h4 className="font-bold text-white text-sm uppercase tracking-wider">Aangepaste Visualisatie</h4>
             <p className="text-slate-400 leading-relaxed text-[11px]">
-              Onze engineers ontwerpen een overzichtelijke en drempelvrije 2D (schematische) of high-fidelity 3D replica van uw machines, bedrijfspand, of logistieke hub.
+              Onze engineers ontwerpen een overzichtelijke, drempelvrije 2D-replica (schematisch) of high-fidelity 3D-replica van uw machines, bedrijfspand of logistieke hub.
             </p>
           </div>
           <div className="p-5.5 rounded-2xl border border-white/5 bg-white/5 space-y-3">
             <span className="text-2xl font-black text-purple-400 font-display">03</span>
             <h4 className="font-bold text-white text-sm uppercase tracking-wider">Scenario Planner Integration</h4>
             <p className="text-slate-400 leading-relaxed text-[11px]">
-              We configureren 'hefbomen' waarmee u onder gecontroleerde omstandigheden stress tests en pieksimulaties uitvoert om bottlenecks vroegtijdig bloot te leggen.
+              We configureren 'hefbomen' waarmee u onder gecontroleerde omstandigheden stresstests en pieksimulaties uitvoert en bottlenecks vroegtijdig blootlegt.
             </p>
           </div>
           <div className="p-5.5 rounded-2xl border border-white/5 bg-white/5 space-y-3">
             <span className="text-2xl font-black text-emerald-400 font-display">04</span>
             <h4 className="font-bold text-white text-sm uppercase tracking-wider">Leta AI Integratie</h4>
             <p className="text-slate-400 leading-relaxed text-[11px]">
-              We integreren ons Gemini Large Language Model met uw data. De Co-pilot leest de telemetry live en geeft drempelvrij predictief onderhoudsadvies.
+              We integreren ons Gemini Large Language Model met uw data. De Co-pilot leest de telemetry live en geeft drempelvrij, predictief onderhoudsadvies.
             </p>
           </div>
         </div>
@@ -591,10 +591,10 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       {/* 4. DYNAMIC ROI & PRICING CALCULATOR */}
       <section className="px-4 py-16 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full z-10 border-t border-white/5" id="roi-calculator">
         <div className="text-center mb-12">
-          <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest block mb-1">BESPARINGEN ANALYSE</span>
-          <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-2 tracking-tight">Interactieve ROI & Kosten Calculator</h2>
+          <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest block mb-1">BESPARINGSANALYSE</span>
+          <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-2 tracking-tight">Interactieve ROI- & Kostencalculator</h2>
           <p className="text-slate-400 max-w-2xl mx-auto text-xs sm:text-sm">
-            Bereken de geschatte opstartkosten, maandelijkse licenties en het financiële voordeel van de inzet van een op maat gemaakte Digital Twin.
+            Bereken de geschatte opstartkosten, maandelijkse licentiekosten en het financiële voordeel van een op maat gemaakte Digital Twin.
           </p>
         </div>
 
@@ -688,7 +688,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             <div className="mt-6 flex items-start space-x-2.5 p-3 rounded-xl bg-black/30 text-[10px] text-slate-500 leading-normal border border-white/5 font-mono">
               <AlertTriangle className="h-4 w-4 text-cyan-500 shrink-0 mt-0.5" />
               <span>
-                De efficiencyverbeteringen zijn gebaseerd op werkelijke data uit onze referentie-casussen en representeren gemiddelde faalkostreducties van 10% tot 16% in het eerste jaar.
+                De efficiëntieverbeteringen zijn gebaseerd op werkelijke data uit onze referentiecases en vertegenwoordigen gemiddelde faalkostenreducties van 10% tot 16% in het eerste jaar.
               </span>
             </div>
           </div>
@@ -749,7 +749,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
           <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">GEEN VERPLICHTING</span>
           <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-2 tracking-tight">Simuleer Uw Eigen Digital Twin</h2>
           <p className="text-slate-400 max-w-2xl mx-auto text-xs sm:text-sm">
-            Vul uw bedrijfsnaam, sector en specifieke operational pain-points in. Onze Leta AI-module stelt direct een unieke, realistische digital twin pilot voor u op.
+            Vul uw bedrijfsnaam, sector en specifieke operationele knelpunten in. Onze Leta AI-module stelt direct een unieke, realistische digital-twinpilot voor u op.
           </p>
         </div>
 
@@ -800,7 +800,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
               </div>
 
               <div>
-                <label className="block text-[10px] font-mono text-slate-400 uppercase mb-1.5 font-bold">Zakelijk Emailadres</label>
+                <label className="block text-[10px] font-mono text-slate-400 uppercase mb-1.5 font-bold">Zakelijk E-mailadres</label>
                 <input
                   type="email"
                   required
@@ -845,7 +845,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
             </form>
 
             <div className="p-3 bg-black/30 rounded-xl text-[10px] text-slate-500 mt-4 leading-normal font-mono border border-white/5">
-              <span>Opmerking: Dit is een live AI-integratie. Uw input wordt verwerkt door Gemini 3.5-Flash via een beveiligde serververbinding om een nauwkeurig business-voorstel te compileren.</span>
+              <span>Opmerking: dit is een live AI-integratie. Uw input wordt verwerkt door Gemini 3.5-Flash via een beveiligde serververbinding om een nauwkeurig zakelijk voorstel op te stellen.</span>
             </div>
           </div>
 
@@ -868,7 +868,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                     }}
                     className="cursor-pointer text-[10px] font-mono text-slate-400 border border-white/10 rounded px-2.5 py-1 hover:text-white hover:bg-white/5 transition-all no-print"
                   >
-                    Printers weergave
+                    Printweergave
                   </button>
                 </div>
 
@@ -932,7 +932,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                 <div className="pt-3 border-t border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs no-print">
                   <div>
                     <span className="block text-[10px] font-mono text-slate-500 font-bold uppercase">Leta AI Blueprint Compiler</span>
-                    <span className="block text-[11px] text-emerald-400 font-mono font-semibold">Geproduceerd in {new Date().toLocaleDateString('nl-NL')}</span>
+                    <span className="block text-[11px] text-emerald-400 font-mono font-semibold">Gegenereerd op {new Date().toLocaleDateString('nl-NL')}</span>
                   </div>
                   
                   <button
@@ -942,7 +942,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                     className="cursor-pointer px-5 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] rounded-lg tracking-wider uppercase flex items-center justify-center space-x-1.5 transition-all"
                   >
                     <PhoneCall className="h-3.5 w-3.5" />
-                    <span>Boek Direct Demo Afspraak</span>
+                    <span>Boek direct een demo-afspraak</span>
                   </button>
                 </div>
               </div>
@@ -951,7 +951,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                 <FileText className="h-14 w-14 text-slate-700 mb-4 animate-pulse" />
                 <h4 className="text-sm font-bold font-display text-white mb-2">Uw Digitale Blauwdruk Wacht</h4>
                 <p className="text-slate-500 max-w-sm text-xs leading-relaxed font-sans">
-                  Vul het formulier aan de linkerkant in om Leta AI direct uw op maat gemaakte digital twin architectuur en ROI prognose te laten berekenen.
+                  Vul het formulier links in en laat Leta AI direct uw op maat gemaakte digital-twinarchitectuur en ROI-prognose berekenen.
                 </p>
                 {isGeneratingProposal && (
                   <div className="mt-6 flex flex-col items-center space-y-2">
@@ -959,7 +959,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75 animate-duration-1000"></span>
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
                     </span>
-                    <span className="text-[10px] text-slate-450 font-mono">Sensoring, API & kosten ratio calculatie gaande...</span>
+                    <span className="text-[10px] text-slate-450 font-mono">Sensor-, API- en kostenberekening bezig...</span>
                   </div>
                 )}
                 {proposalError && (
@@ -977,17 +977,17 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
       {/* 6. TRUSTED TESTIMONIALS */}
       <section className="px-4 py-16 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full z-10 border-t border-white/5 bg-[#07090F]">
         <div className="text-center mb-12">
-          <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">KLANTEN SUCCESSEN</span>
+          <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">KLANTSUCCESSEN</span>
           <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-2 tracking-tight">Vraag Het Onze Partners</h2>
           <p className="text-slate-400 max-w-xl mx-auto text-xs sm:text-sm">
-            Echte betrouwbaarheid door bewezen faalkostenreductie en smart datapunten.
+            Echte betrouwbaarheid, bewezen door lagere faalkosten en slimme datapunten.
           </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 font-sans text-xs" id="testimonials-grid">
           <div className="p-6 rounded-2xl border border-white/10 bg-white/5 flex flex-col justify-between backdrop-blur-sm">
             <p className="italic text-slate-400 leading-relaxed">
-              "Voor onze hoogwaardige frituursystemen hadden we behoefte aan realtime SCADA telemetry op de robots en lasersnijders. Dit digital twin platform van Let's-Twin gaf ons direct grip op temperatuurpieken en reduceerde onze defecten met maar liefst 14,2%."
+              "Voor onze hoogwaardige frituursystemen hadden we behoefte aan realtime SCADA-telemetry op de robots en lasersnijders. Het digital-twinplatform van Let's-Twin gaf ons direct grip op temperatuurpieken en verlaagde onze uitval met maar liefst 14,2%."
             </p>
             <div className="mt-4 pt-3 border-t border-white/5 flex items-center space-x-3">
               <span className="h-8 w-8 rounded-full bg-blue-600/20 text-blue-400 font-bold font-display uppercase flex items-center justify-center">QB</span>
@@ -1000,7 +1000,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
 
           <div className="p-6 rounded-2xl border border-white/10 bg-white/5 flex flex-col justify-between backdrop-blur-sm">
             <p className="italic text-slate-400 leading-relaxed">
-              "We beheren hiermee de stedelijke afwatering en hittestress in de binnenstad van Woerden. Dankzij de 'Wat-Als' scenariosimulatie weten we exact wanneer de poldergemalen preventief open moeten bij heftige wolkbreuken van 42mm neerslag."
+              "We beheren hiermee de stedelijke afwatering en hittestress in de binnenstad van Woerden. Dankzij de 'Wat-Als'-scenariosimulatie weten we precies wanneer de poldergemalen preventief open moeten bij zware wolkbreuken van 42 mm neerslag."
             </p>
             <div className="mt-4 pt-3 border-t border-white/5 flex items-center space-x-3">
               <span className="h-8 w-8 rounded-full bg-cyan-600/20 text-cyan-400 font-bold font-display uppercase flex items-center justify-center">GW</span>
@@ -1013,7 +1013,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
 
           <div className="p-6 rounded-2xl border border-white/10 bg-white/5 flex flex-col justify-between backdrop-blur-sm">
             <p className="italic text-slate-400 leading-relaxed">
-              "Voor onze luxe keten van 5 schoenwinkels was het optimaliseren van de schoenmaat-voorraad cruciaal. Dankzij de Sole Twin digital twin signaleren we looproutes en kassa-knelpunten direct, waardoor onze winkelomzet met 11% en klanttevredenheid enorm steeg."
+              "Voor onze luxe keten van 5 schoenwinkels was het optimaliseren van de maatvoorraad cruciaal. Dankzij de Sole Twin-digital-twin signaleren we looproutes en kassaknelpunten direct, waardoor onze winkelomzet met 11% steeg en de klanttevredenheid flink toenam."
             </p>
             <div className="mt-4 pt-3 border-t border-white/5 flex items-center space-x-3">
               <span className="h-8 w-8 rounded-full bg-purple-600/20 text-purple-400 font-bold font-display uppercase flex items-center justify-center">ST</span>
@@ -1037,7 +1037,7 @@ export default function LandingPage({ onStartTwin, setTab }: LandingPageProps) {
           <span className="text-xs font-semibold text-slate-300">Gemini 3.5-Flash Core</span>
         </div>
         <div className="flex flex-col md:items-start text-center md:text-left">
-          <span className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em] mb-1">Sensors Protocols</span>
+          <span className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em] mb-1">Sensorprotocollen</span>
           <span className="text-xs font-semibold text-slate-300">MQTT, Modbus/TCP, LoRaWAN, API</span>
         </div>
         <div className="flex items-center gap-4">

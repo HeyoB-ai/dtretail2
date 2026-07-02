@@ -29,7 +29,7 @@ export default function GeminiPanel({
     qbtec: [
       { text: "Welke invloed heeft een laser-oververhitting op onze productie-output en de orders?", label: "Druk- & Temp Analyse" },
       { text: "Wat is de optimale shiftbezetting bij de actuele lasersnijder parameters?", label: "Shift Optimalisatie" },
-      { text: "Predictief onderhoud: wanneer moeten we de food-lijnen kalibreren?", label: "Onderhoud Propositie" }
+      { text: "Predictief onderhoud: wanneer moeten we de food-lijnen kalibreren?", label: "Onderhoudsadvies" }
     ],
     woerden: [
       { text: "Analyseer het drainage- en waterniveau risico in Woerden bij 40mm neerslag", label: "Waterpeil Risico" },
@@ -124,7 +124,7 @@ export default function GeminiPanel({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
               </span>
-              <span>Leta is de IoT telemetry aan het analyseren...</span>
+              <span>Leta analyseert de IoT-telemetry...</span>
             </div>
           </div>
         )}

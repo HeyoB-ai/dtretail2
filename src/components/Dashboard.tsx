@@ -53,9 +53,9 @@ export default function Dashboard({
           sector: "Maakindustrie & High-tech Machinebouw",
           architecture: "Modbus/TCP • Siemens Industrial SCADA integration",
           points: [
-            { label: "IoT Sensoren", value: "Realtime laser-temperatuursensoren, Modbus controllers en snijkoppen-telemetry." },
-            { label: "Primaire Business Waarde", value: "Faalkost-reductie door preventief onderhoud en voorspelbare orderplanning." },
-            { label: "Integratiemodel", value: "Bi-directionele Edge API verbinding met PLC controller-hubs op de montagerubrieken." }
+            { label: "IoT Sensoren", value: "Realtime laser-temperatuursensoren, Modbus-controllers en snijkop-telemetry." },
+            { label: "Primaire Business Waarde", value: "Faalkostenreductie door preventief onderhoud en voorspelbare orderplanning." },
+            { label: "Integratiemodel", value: "Bidirectionele Edge-API-verbinding met PLC-controllerhubs op de montagelijnen." }
           ]
         };
       case 'woerden':
@@ -64,9 +64,9 @@ export default function Dashboard({
           sector: "Openbaar Bestuur & Stedelijke Infrastructuur",
           architecture: "LoRaWAN Urban Gateway • Sensor-Multiplex Network",
           points: [
-            { label: "IoT Sensoren", value: "Hydro-grafische debietmeters, stadsbrede hittestress-sensoren en CO2-binnenstadsmonitoren." },
-            { label: "Primaire Bestuurs Waarde", value: "Proactief anticiperen op zware neerslag en stedelijke temperatuurconcentraties." },
-            { label: "Integratiemodel", value: "Geospatiale open data integratie met actieve LoraWAN omgevings-omslagmeters." }
+            { label: "IoT Sensoren", value: "Hydrografische debietmeters, stadsbrede hittestress-sensoren en CO₂-monitoren in de binnenstad." },
+            { label: "Primaire Bestuurs Waarde", value: "Proactief anticiperen op zware neerslag en stedelijke hitteconcentraties." },
+            { label: "Integratiemodel", value: "Geospatiale open-data-integratie met actieve LoRaWAN-omgevingssensoren." }
           ]
         };
       case 'retail':
@@ -75,9 +75,9 @@ export default function Dashboard({
           sector: "Luxe Retail & Supply Chain (5 Filialen)",
           architecture: "Winkel Edge telemetry • Dynamic Inventory Sync API",
           points: [
-            { label: "IoT Sensoren", value: "Looproute-analysers, point-of-sale kassahuizen, en actuele depot-bevoorrading matrices." },
-            { label: "Primaire Retail Waarde", value: "Optimale inter-filiaal schoenmaat herverdeling ter voorkoming van derving en 'out of stock'." },
-            { label: "Integratiemodel", value: "JSON live inventory streams via gecentraliseerde cloud ERP database poorten." }
+            { label: "IoT Sensoren", value: "Looproute-analyses, point-of-sale-kassa's en actuele depotbevoorrading." },
+            { label: "Primaire Retail Waarde", value: "Optimale herverdeling van schoenmaten tussen filialen, ter voorkoming van derving en 'out of stock'." },
+            { label: "Integratiemodel", value: "Live JSON-inventory-streams via gecentraliseerde cloud-ERP-databases." }
           ]
         };
     }
@@ -106,7 +106,7 @@ export default function Dashboard({
       {/* Top Banner and Twin Selector */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 pb-5 border-b border-white/5 gap-4" id="dashboard-header">
         <div>
-          <span className="text-xs font-mono text-blue-400 tracking-wider uppercase block mb-1">Missions Control Center</span>
+          <span className="text-xs font-mono text-blue-400 tracking-wider uppercase block mb-1">Mission Control Center</span>
           <h2 className="text-xl sm:text-2xl font-black font-display text-white">Let's-Twin Live Control Room</h2>
         </div>
 

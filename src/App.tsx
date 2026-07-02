@@ -19,9 +19,9 @@ export default function App() {
       id: "welcome",
       sender: "ai",
       text: "Hallo! Ik ben Leta, jouw Let's-Twin AI Co-pilot.\n\n" +
-            "Ik sta in direct contact met de IoT-sensors via onze Edge SCADA-gateways van QBTEC (Maakbedrijf), Gemeente Woerden (Stadsbeheer) en onze Sole Twin Luxe Schoenmode (5 filialen).\n\n" +
-            "Samen kunnen we de live telemetry analyseren en ingewikkelde 'Wat-Als' scenario's doorrekenen. Ik help je bij het nemen van de juiste beleid- en operationele beslissingen! " +
-            "Stuur me een bericht of klik op een van de scenario-knoppen in de Live Control Room om direct te beginnen.",
+            "Ik sta rechtstreeks in verbinding met de IoT-sensoren via onze Edge SCADA-gateways bij QBTEC (maakbedrijf), Gemeente Woerden (stadsbeheer) en Sole Twin Luxe Schoenmode (5 filialen).\n\n" +
+            "Samen analyseren we de live telemetry en rekenen we complexe 'Wat-Als'-scenario's door. Zo help ik je de juiste beleids- en operationele beslissingen te nemen. " +
+            "Stuur een bericht of klik op een scenario-knop in de Live Control Room om te beginnen.",
       timestamp: new Date()
     }
   ]);
@@ -62,7 +62,7 @@ export default function App() {
       const rawText = await resilientAnalyze({
         message: text,
         activeTwin: twinContext,
-        telemetry: telemetryContext || { info: "Geen rechtstreekse telemetry meegezonden. Analyseer het algemene Let's-Twin platform." }
+        telemetry: telemetryContext || { info: "Geen rechtstreekse telemetry meegezonden. Analyseer het algemene Let's-Twin-platform." }
       });
 
       const aiMsg: ChatMessage = {
@@ -91,7 +91,7 @@ export default function App() {
       {
         id: "welcome-reset",
         sender: "ai",
-        text: "Geschiedenis gewist. IoT-sensors staan klaar. Waar kan ik je vandaag bij ondersteunen?",
+        text: "Geschiedenis gewist. De IoT-sensoren staan klaar. Waar kan ik je mee helpen?",
         timestamp: new Date()
       }
     ]);
@@ -148,7 +148,7 @@ export default function App() {
                 onClick={() => setTab('dashboard')}
                 className="cursor-pointer font-display text-xs font-semibold px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-550 rounded-xl text-white hover:opacity-95 transition-opacity self-start md:self-auto"
               >
-                Ga naar Monitor Besturing
+                Naar de Live Control Room
               </button>
             </div>
 
@@ -161,7 +161,7 @@ export default function App() {
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
                   <h3 className="font-display font-bold text-white text-base mb-3">Globale Multiplex Netwerkstatus</h3>
                   <p className="text-slate-400 text-xs leading-relaxed mb-4">
-                    Dit lab fungeert als directe filter naar Leta's AI-beslissingsmodel. Hieronder ziet u de actieve gateways behorend bij onze drie live-embedded replicas.
+                    Dit lab is de directe toegang tot Leta's AI-beslissingsmodel. Hieronder ziet u de actieve gateways van onze drie live-embedded replica's.
                   </p>
 
                   <div className="space-y-3 font-mono text-xs">
@@ -230,7 +230,7 @@ export default function App() {
                   <div className="mt-4 p-3.5 rounded-xl border border-white/5 bg-black/20 flex items-start space-x-2 text-xs text-slate-450">
                     <HelpCircle className="h-4 w-4 text-cyan-400 shrink-0 mt-0.5" />
                     <p className="font-sans leading-relaxed">
-                      Leta begrijpt tevens algemene vragen over Digital Twins, waterbeheersystemen, CNC-robotcalibratie, retail dervingsreducties en het berekenen van forecasts.
+                      Leta beantwoordt ook algemene vragen over Digital Twins, waterbeheersystemen, CNC-robotkalibratie, dervingsreductie in retail en het berekenen van forecasts.
                     </p>
                   </div>
                 </div>
@@ -282,7 +282,7 @@ export default function App() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                               </span>
-                              <span>Leta is de complete simulatie aan het controleren...</span>
+                              <span>Leta controleert de volledige simulatie...</span>
                             </div>
                           </div>
                         )}
